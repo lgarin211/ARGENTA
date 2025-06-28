@@ -1,0 +1,32 @@
+/* Custom parallelogram shape rotated 90 degrees */
+.parallelogram {
+  transform: rotate(90deg) skew(-20deg);
+  background-color: #7f1d1d; /* Tailwind red-900 shade */
+  margin: 2rem 0;
+  padding: 2rem 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+.parallelogram > * {
+  transform: skew(20deg) rotate(-90deg);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  color: white;
+  width: 100%;
+}
+
+/* Parallelogram separator between sections rotated 90 degrees */
+.parallelogram-separator {
+  width: 50px;
+  height: 100%;
+  background-color: #1f2937; /* Tailwind gray-800 */
+  transform: rotate(90deg) skew(-20deg);
+  margin: 0 auto;
+}
+
+.parallelogram-separator > * {
+  transform: skew(20deg) rotate(-90deg);
+}
