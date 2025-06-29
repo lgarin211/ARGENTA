@@ -168,77 +168,26 @@
     const closeModal = document.getElementById('closeModal');
     const readMoreButtons = document.querySelectorAll('.read-more-btn');
 
-    // Kumpulan variabel konten dinamis
-    const kontenLayanan = {
-      "ATM SECURITY CAMERA": {
-        title: "ATM SECURITY CAMERA",
-        desc: "Detail layanan ATM Security Camera yang meliputi pemasangan, pemeliharaan, dan monitoring kamera keamanan ATM.",
-        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80"
-      },
-      "ATM SPAREPARTS": {
-        title: "ATM SPAREPARTS",
-        desc: "Detail layanan penyediaan suku cadang ATM berkualitas tinggi dengan garansi dan dukungan teknis.",
-        image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=400&q=80"
-      },
-      "SOFTWARE DISTRIBUTION": {
-        title: "SOFTWARE DISTRIBUTION",
-        desc: "Detail layanan distribusi perangkat lunak untuk sistem ATM dan layanan perbankan lainnya.",
-        image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80"
-      },
-      "CASH RECYCLING MACHINE (CRM)": {
-        title: "CASH RECYCLING MACHINE (CRM)",
-        desc: "Detail layanan mesin daur ulang uang tunai yang efisien dan aman untuk operasional ATM.",
-        image: "https://static.vecteezy.com/system/resources/previews/048/860/255/non_2x/indonesian-map-on-red-flat-design-illustration-vector.jpg"
+    // Hapus semua deklarasi variabel konten dinamis, ganti dengan variabel global yang akan diisi dari JSON
+    let kontenLayanan, kontenKomisarisDirektur, kontenVisiMisi, kontenKoneksiWilayah, kontenPerusahaanDipercaya, kontenTentangKami;
+
+    // Fungsi untuk load data JSON eksternal
+    async function loadKontenJSON() {
+      try {
+        const res = await fetch('hook/index.json');
+        if (!res.ok) throw new Error('Gagal memuat data JSON');
+        const data = await res.json();
+        kontenLayanan = data.kontenLayanan;
+        kontenKomisarisDirektur = data.kontenKomisarisDirektur;
+        kontenVisiMisi = data.kontenVisiMisi;
+        kontenKoneksiWilayah = data.kontenKoneksiWilayah;
+        kontenPerusahaanDipercaya = data.kontenPerusahaanDipercaya;
+        kontenTentangKami = data.kontenTentangKami;
+      } catch (e) {
+        alert('Gagal memuat konten halaman!');
+        throw e;
       }
-    };
-
-    // Kumpulan variabel konten dinamis untuk komponen lain
-    const kontenKomisarisDirektur = {
-      komisaris: {
-        nama: "Nama Komisaris",
-        jabatan: "Komisaris",
-        image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-        desc: "Deskripsi singkat tentang Komisaris."
-      },
-      direktur: {
-        nama: "Nama Direktur",
-        jabatan: "Direktur",
-        image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-        desc: "Deskripsi singkat tentang Direktur."
-      }
-    };
-
-    const kontenVisiMisi = {
-      visi: "Menjadi mitra teknologi terpercaya yang mendorong transformasi digital sektor perbankan melalui solusi layanan mandiri yang inovatif, andal, dan berkelanjutan.",
-      misi: [
-        "Menyediakan solusi perangkat keras dan lunak yang unggul, serta layanan pemeliharaan yang profesional untuk menunjang efisiensi dan keamanan sistem layanan mandiri perbankan.",
-        "Membangun kemitraan strategis jangka panjang dengan institusi keuangan, melalui komitmen terhadap inovasi, keunggulan layanan, dan distribusi nasional yang kuat."
-      ]
-    };
-
-    const kontenKoneksiWilayah = {
-      judul: "KONEKSI WILAYAH",
-      deskripsi: "Tersebar pada 250 daerah di Indonesia dengan teknisi yang profesional dan berpengalaman",
-      image: "https://static.vecteezy.com/system/resources/previews/048/860/255/non_2x/indonesian-map-on-red-flat-design-illustration-vector.jpg"
-    };
-
-    const kontenPerusahaanDipercaya = {
-      judul: "Telah Dipercaya Oleh Perusahaan Lain",
-      logo: [
-        { nama: "BCA", image: "https://shl.co.id/wp-content/uploads/2022/11/lg-BCA-1.png" }
-        // Tambahkan logo lain jika ada
-      ]
-    };
-
-    // Kumpulan variabel konten dinamis
-    const kontenTentangKami = {
-      judul: "TENTANG KAMI",
-      image: "https://2456764.fs1.hubspotusercontent-eu1.net/hub/2456764/hubfs/YoungPeopleBusinessMeeting_1200x627.jpg",
-      paragraf: [
-        "Argenta adalah perusahaan distribusi produk dan layanan teknologi informasi yang berfokus pada sektor perbankan di Indonesia. Didirikan oleh para profesional dengan pengalaman lebih dari 10 tahun di bidang perbankan, konsultasi, penjualan, dan layanan, Argenta menghadirkan solusi yang andal dan terintegrasi untuk mendukung transformasi digital perbankan.",
-        "Didukung oleh tim teknis berpengalaman hingga 20 tahun, dengan keahlian dalam pengoperasian ATM dan dukungan terhadap berbagai merek mesin ATM, Argenta berkomitmen memberikan layanan berkualitas tinggi yang sesuai dengan kebutuhan industri di Indonesia."
-      ]
-    };
+    }
 
     // Hamburger menu logic
     const hamburger = document.getElementById('hamburger');
@@ -407,7 +356,8 @@
       }, 400);
     }
     // Show loading on menu click
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
+      await loadKontenJSON();
       renderVisiMisi();
       renderKomisarisDirektur();
       renderKoneksiWilayah();
