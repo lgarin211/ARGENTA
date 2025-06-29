@@ -31,13 +31,8 @@
     </nav>
   </header>
 
-  <section class="relative h-[80vh] flex items-center justify-center text-center px-4 mt-16 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');">
-    <div class="absolute inset-0 bg-red-900 bg-opacity-80"></div>
-    <div class="relative max-w-xl text-white">
-      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Senantiasa Membantu</h1>
-      <p class="text-lg md:text-xl font-normal">Argenta Teknika Intramas siap membantu anda dalam penyediaan kebutuhan bisnis.</p>
-    </div>
-  </section>
+  <!-- Hero Section (akan di-render oleh JS) -->
+  <section id="hero-section" class="relative"></section>
 
   <!-- Hapus section statis yang lama, hanya gunakan section dinamis -->
   <section id="tentang-kami" class="container mx-auto my-12 bg-red-800 rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row"></section>
@@ -171,12 +166,22 @@
     // Hapus semua deklarasi variabel konten dinamis, ganti dengan variabel global yang akan diisi dari JSON
     let kontenLayanan, kontenKomisarisDirektur, kontenVisiMisi, kontenKoneksiWilayah, kontenPerusahaanDipercaya, kontenTentangKami;
 
+    // Default hero data
+    defaultHeroData = {
+      background: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80",
+      overlay: 0.45,
+      title: "Senantiasa Membantu",
+      subtitle: "Argenta Teknika Intramas siap membantu anda dalam penyediaan kebutuhan bisnis."
+    };
+    let kontenHero = defaultHeroData;
+
     // Fungsi untuk load data JSON eksternal
     async function loadKontenJSON() {
       try {
         const res = await fetch('hook/index.json');
         if (!res.ok) throw new Error('Gagal memuat data JSON');
         const data = await res.json();
+        kontenHero = data.kontenHero || defaultHeroData;
         kontenLayanan = data.kontenLayanan;
         kontenKomisarisDirektur = data.kontenKomisarisDirektur;
         kontenVisiMisi = data.kontenVisiMisi;
@@ -237,6 +242,24 @@
       navMenu.classList.add('flex-col', 'items-center', 'justify-center', 'space-y-8');
     }
     // Render konten dinamis ke section
+    function renderHero() {
+      const el = document.getElementById('hero-section');
+      // Jika kontenHero adalah array, render carousel, jika bukan, render satu slide
+      let slides = Array.isArray(kontenHero) ? kontenHero : [kontenHero];
+      el.innerHTML = `
+        <div class="owl-carousel hero-carousel">
+          ${slides.map(hero => `
+            <section class=\"relative h-[80vh] flex items-center justify-center text-center px-4 mt-16 bg-cover bg-center\" style=\"background-image: url('${hero.background}');\">
+              <div class=\"absolute inset-0 bg-black\" style=\"opacity: ${hero.overlay};\"></div>
+              <div class=\"relative max-w-xl text-white\">
+                <h1 class=\"text-4xl md:text-5xl font-extrabold mb-4\">${hero.title}</h1>
+                <p class=\"text-lg md:text-xl font-normal\">${hero.subtitle}</p>
+              </div>
+            </section>
+          `).join('')}
+        </div>
+      `;
+    }
     function renderVisiMisi() {
       const visiMisi = document.getElementById('visi-misi');
       visiMisi.innerHTML = `
@@ -262,20 +285,28 @@
           <h2 class="text-3xl font-bold mb-8 tracking-widest">KOMISARIS DAN DIREKTUR</h2>
           <div class="flex flex-col md:flex-row justify-center gap-16 max-w-5xl mx-auto text-center">
             <div class="md:w-1/2">
-              <h3 class="text-xl font-semibold mb-2">Komisaris</h3>
-              <div class="h-1 w-24 bg-red-900 mx-auto mb-6"></div>
-              <img src="${kontenKomisarisDirektur.komisaris.image}" alt="Komisaris" class="mx-auto rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out w-48 h-48 object-cover" />
-              <div class="mt-4 text-lg font-bold">${kontenKomisarisDirektur.komisaris.nama}</div>
-              <div class="text-sm text-gray-300 mb-2">${kontenKomisarisDirektur.komisaris.jabatan}</div>
-              <div class="text-sm text-gray-400">${kontenKomisarisDirektur.komisaris.desc}</div>
+              <h3 class="text-4xl font-normal mb-2">Komisaris</h3>
+              <div class="h-3 w-3/4 bg-red-900 mx-auto mb-6"></div>
+              <div class="relative group mx-auto w-72 h-72 rounded overflow-hidden shadow-lg">
+                <img src="${kontenKomisarisDirektur.komisaris.image}" alt="Komisaris" class="object-cover w-full h-full grayscale group-hover:grayscale-0 transition duration-300 group-hover:scale-125" />
+                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-red-900/90 to-transparent p-4 flex flex-col items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div class="text-lg font-bold text-white">${kontenKomisarisDirektur.komisaris.nama}</div>
+                  <div class="text-sm text-white">${kontenKomisarisDirektur.komisaris.jabatan}</div>
+                  <div class="text-xs text-white mt-1">${kontenKomisarisDirektur.komisaris.desc}</div>
+                </div>
+              </div>
             </div>
             <div class="md:w-1/2">
-              <h3 class="text-xl font-semibold mb-2">Direktur</h3>
-              <div class="h-1 w-24 bg-red-900 mx-auto mb-6"></div>
-              <img src="${kontenKomisarisDirektur.direktur.image}" alt="Direktur" class="mx-auto rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out w-48 h-48 object-cover" />
-              <div class="mt-4 text-lg font-bold">${kontenKomisarisDirektur.direktur.nama}</div>
-              <div class="text-sm text-gray-300 mb-2">${kontenKomisarisDirektur.direktur.jabatan}</div>
-              <div class="text-sm text-gray-400">${kontenKomisarisDirektur.direktur.desc}</div>
+              <h3 class="text-4xl font-normal mb-2">Direktur</h3>
+              <div class="h-3 w-3/4 bg-red-900 mx-auto mb-6"></div>
+              <div class="relative group mx-auto w-72 h-72 rounded overflow-hidden shadow-lg">
+                <img src="${kontenKomisarisDirektur.direktur.image}" alt="Direktur" class="object-cover w-full h-full grayscale group-hover:grayscale-0 transition duration-300 group-hover:scale-125" />
+                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-red-900/90 to-transparent p-4 flex flex-col items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div class="text-lg font-bold text-white">${kontenKomisarisDirektur.direktur.nama}</div>
+                  <div class="text-sm text-white">${kontenKomisarisDirektur.direktur.jabatan}</div>
+                  <div class="text-xs text-white mt-1">${kontenKomisarisDirektur.direktur.desc}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -323,8 +354,8 @@
           </h2>
           <div class="owl-carousel owl-theme mb-8">
             ${kontenPerusahaanDipercaya.logo.map(l => `
-              <div class="flex items-center justify-center bg-red-800 rounded-full h-20 w-40 mx-auto" style="width: inherit;">
-                ${l.image ? `<img src="${l.image}" alt="${l.nama}" class="h-12 object-contain" style="height: 10rem;" />` : `<span class="text-red-900 font-bold text-lg">${l.nama}</span>`}
+              <div class="flex items-center justify-center rounded-full h-20 w-40 mx-auto" style="width: inherit;">
+                ${l.image ? `<img src="${l.image}" alt="${l.nama}" class="h-12 object-contain"  />` : `<span class="text-red-900 font-bold text-lg">${l.nama}</span>`}
               </div>
             `).join('')}
           </div>
@@ -358,6 +389,7 @@
     // Show loading on menu click
     document.addEventListener('DOMContentLoaded', async function() {
       await loadKontenJSON();
+      renderHero();
       renderVisiMisi();
       renderKomisarisDirektur();
       renderKoneksiWilayah();
@@ -369,7 +401,7 @@
         $('.layanan-carousel').owlCarousel({
           loop:true,
           margin:24,
-          nav:true,
+          nav:false,
           dots:true,
           responsive:{
             0:{items:1},
@@ -377,10 +409,21 @@
             1000:{items:3}
           }
         });
+        $('.hero-carousel').owlCarousel({
+          items: 1,
+          loop: true,
+          nav: false,
+          dots: true,
+          autoplay: true,
+          autoplayTimeout: 5000,
+          animateOut: 'fadeOut',
+          animateIn: 'fadeIn',
+          smartSpeed: 800
+        });
         $('.owl-carousel.owl-theme').owlCarousel({
           loop:true,
           margin:24,
-          nav:true,
+          nav:false,
           dots:true,
           responsive:{
             0:{items:1},
