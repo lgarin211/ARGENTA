@@ -7,17 +7,26 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"  crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="bg-red-900 text-white font-montserrat leading-relaxed">
   <header class="fixed w-full top-0 z-50 bg-gradient-to-b from-red-900 via-red-900/90 to-transparent">
     <nav class="container mx-auto flex justify-between items-center p-4">
       <div class="text-2xl font-bold tracking-widest">ARGENTA</div>
-      <ul class="flex space-x-8">
-        <li><a href="index.html" class="hover:text-red-500 font-medium">Perusahaan</a></li>
-        <li><a href="#" class="hover:text-red-500 font-medium">Layanan</a></li>
-        <li><a href="karir.html" class="hover:text-red-500 font-medium">Karir</a></li>
-        <li><a href="berita.html" class="hover:text-red-500 font-medium">Artikel</a></li>
-        <li><a href="#" class="hover:text-red-500 font-medium">Hubungi Kami</a></li>
+      <!-- Hamburger button (mobile only) -->
+      <button id="hamburger" class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none" aria-label="Open menu">
+        <span class="block w-6 h-0.5 bg-white mb-1"></span>
+        <span class="block w-6 h-0.5 bg-white mb-1"></span>
+        <span class="block w-6 h-0.5 bg-white"></span>
+      </button>
+      <ul id="navMenu" class="hidden md:flex md:flex-row md:space-x-8 md:static md:bg-transparent md:w-auto md:h-auto md:opacity-100 md:visible fixed top-16 left-0 w-full bg-red-900/95 h-screen flex-col items-center justify-center space-y-8 md:space-y-0 opacity-0 invisible transition-all duration-300 z-40">
+        <li class="w-full md:w-auto text-center"><a href="index.html" class="block py-2 md:py-0 hover:text-red-500 font-medium">Perusahaan</a></li>
+        <li class="w-full md:w-auto text-center"><a href="#" class="block py-2 md:py-0 hover:text-red-500 font-medium">Layanan</a></li>
+        <li class="w-full md:w-auto text-center"><a href="karir.html" class="block py-2 md:py-0 hover:text-red-500 font-medium">Karir</a></li>
+        <li class="w-full md:w-auto text-center"><a href="berita.html" class="block py-2 md:py-0 hover:text-red-500 font-medium">Artikel</a></li>
+        <li class="w-full md:w-auto text-center"><a href="#" class="block py-2 md:py-0 hover:text-red-500 font-medium">Hubungi Kami</a></li>
       </ul>
     </nav>
   </header>
@@ -30,163 +39,20 @@
     </div>
   </section>
 
-  <section class="container mx-auto my-12 bg-red-800 rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row">
-    <div class="md:w-1/2">
-      <img src="https://2456764.fs1.hubspotusercontent-eu1.net/hub/2456764/hubfs/YoungPeopleBusinessMeeting_1200x627.jpg" alt="Meeting room" class="w-full h-full object-cover" />
-    </div>
-    <div class="md:w-1/2 p-8 flex flex-col justify-center text-white">
-      <h2 class="text-3xl font-bold mb-4 tracking-wide">TENTANG KAMI</h2>
-      <p class="mb-4 text-base leading-relaxed">
-        Argenta adalah perusahaan distribusi produk dan layanan teknologi informasi yang berfokus pada sektor perbankan di Indonesia. Didirikan oleh para profesional dengan pengalaman lebih dari 10 tahun di bidang perbankan, konsultasi, penjualan, dan layanan, Argenta menghadirkan solusi yang andal dan terintegrasi untuk mendukung transformasi digital perbankan.
-      </p>
-      <p class="text-base leading-relaxed">
-        Didukung oleh tim teknis berpengalaman hingga 20 tahun, dengan keahlian dalam pengoperasian ATM dan dukungan terhadap berbagai merek mesin ATM, Argenta berkomitmen memberikan layanan berkualitas tinggi yang sesuai dengan kebutuhan industri di Indonesia.
-      </p>
-    </div>
-  </section>
+  <!-- Hapus section statis yang lama, hanya gunakan section dinamis -->
+  <section id="tentang-kami" class="container mx-auto my-12 bg-red-800 rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row"></section>
+  <section id="visi-misi" class="container mx-auto my-12 px-4 text-center text-white"></section>
+  <section id="komisaris-direktur" class="bg-gradient-to-b from-red-900 via-black to-black text-white py-12"></section>
+  <section id="koneksi-wilayah" class="bg-gradient-to-b from-red-900 via-black to-black text-white py-12"></section>
+  <section id="layanan" class="bg-black text-white py-12"></section>
+  <section id="perusahaan-dipercaya" class="bg-red-900 py-12"></section>
 
-  <section class="container mx-auto my-12 px-4 text-center text-white">
-    <h2 class="text-3xl font-bold mb-8 tracking-widest">VISI &amp; MISI</h2>
-    <div class="flex flex-col md:flex-row justify-center gap-12 max-w-5xl mx-auto text-left">
-      <div class="md:w-1/2">
-        <h3 class="text-xl font-semibold mb-4 tracking-wide">Visi</h3>
-        <p class="text-base leading-relaxed whitespace-pre-line">
-          Menjadi mitra teknologi terpercaya yang mendorong transformasi digital sektor perbankan melalui solusi layanan mandiri yang inovatif, andal, dan berkelanjutan.
-        </p>
-      </div>
-      <div class="md:w-1/2">
-        <h3 class="text-xl font-semibold mb-4 tracking-wide">Misi</h3>
-        <ol class="list-decimal list-inside space-y-2 text-base leading-relaxed">
-          <li>Menyediakan solusi perangkat keras dan lunak yang unggul, serta layanan pemeliharaan yang profesional untuk menunjang efisiensi dan keamanan sistem layanan mandiri perbankan.</li>
-          <li>Membangun kemitraan strategis jangka panjang dengan institusi keuangan, melalui komitmen terhadap inovasi, keunggulan layanan, dan distribusi nasional yang kuat.</li>
-        </ol>
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-gradient-to-b from-red-900 via-black to-black text-white py-12">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl font-bold mb-8 tracking-widest">KOMISARIS DAN DIREKTUR</h2>
-      <div class="flex flex-col md:flex-row justify-center gap-16 max-w-5xl mx-auto text-center">
-        <div class="md:w-1/2">
-          <h3 class="text-xl font-semibold mb-2">Komisaris</h3>
-          <div class="h-1 w-24 bg-red-900 mx-auto mb-6"></div>
-          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Komisaris" class="mx-auto rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out w-48 h-48 object-cover" />
-        </div>
-        <div class="md:w-1/2">
-          <h3 class="text-xl font-semibold mb-2">Direktur</h3>
-          <div class="h-1 w-24 bg-red-900 mx-auto mb-6"></div>
-          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Direktur" class="mx-auto rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out w-48 h-48 object-cover" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-gradient-to-b from-red-900 via-black to-black text-white py-12">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl font-bold mb-4 tracking-widest">KONEKSI WILAYAH</h2>
-      <p class="mb-8 max-w-2xl mx-auto">Tersebar pada 250 daerah di Indonesia dengan teknisi yang profesional dan berpengalaman</p>
-      <img src="https://static.vecteezy.com/system/resources/previews/048/860/255/non_2x/indonesian-map-on-red-flat-design-illustration-vector.jpg" alt="Peta Indonesia" class="mx-auto max-w-full h-auto" />
-    </div>
-  </section>
-
-  <section class="bg-black text-white py-12">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold mb-8 tracking-widest text-center">LAYANAN KAMI</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        <!-- Card 1 -->
-        <div class="bg-white text-black rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out cursor-pointer p-6 flex flex-col">
-          <div class="flex items-center mb-4">
-            <svg class="w-10 h-10 text-red-900 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7L9 19L3 13"></path></svg>
-            <h3 class="font-bold uppercase text-lg">ATM SECURITY CAMERA</h3>
-          </div>
-          <p class="text-sm mb-6 flex-grow">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac velit purus.</p>
-          <button class="read-more-btn self-start bg-red-900 text-white px-4 py-2 rounded hover:bg-red-700 transition flex items-center gap-2">
-            Read More
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-          </button>
-        </div>
-        <!-- Card 2 -->
-        <div class="bg-white text-black rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out cursor-pointer p-6 flex flex-col">
-          <div class="flex items-center mb-4">
-            <svg class="w-10 h-10 text-red-900 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7L9 19L3 13"></path></svg>
-            <h3 class="font-bold uppercase text-lg">ATM SPAREPARTS</h3>
-          </div>
-          <p class="text-sm mb-6 flex-grow">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac velit purus.</p>
-          <button class="read-more-btn self-start bg-red-900 text-white px-4 py-2 rounded hover:bg-red-700 transition flex items-center gap-2">
-            Read More
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-          </button>
-        </div>
-        <!-- Card 3 -->
-        <div class="bg-white text-black rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out cursor-pointer p-6 flex flex-col">
-          <div class="flex items-center mb-4">
-            <svg class="w-10 h-10 text-red-900 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7L9 19L3 13"></path></svg>
-            <h3 class="font-bold uppercase text-lg">SOFTWARE DISTRIBUTION</h3>
-          </div>
-          <p class="text-sm mb-6 flex-grow">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac velit purus.</p>
-          <button class="read-more-btn self-start bg-red-900 text-white px-4 py-2 rounded hover:bg-red-700 transition flex items-center gap-2">
-            Read More
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-          </button>
-        </div>
-        <!-- Card 4 -->
-        <div class="bg-white text-black rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out cursor-pointer p-6 flex flex-col">
-          <div class="flex items-center mb-4">
-            <svg class="w-10 h-10 text-red-900 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7L9 19L3 13"></path></svg>
-            <h3 class="font-bold uppercase text-lg">CASH RECYCLING MACHINE (CRM)</h3>
-          </div>
-          <p class="text-sm mb-6 flex-grow">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac velit purus.</p>
-          <button class="read-more-btn self-start bg-red-900 text-white px-4 py-2 rounded hover:bg-red-700 transition flex items-center gap-2">
-            Read More
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-red-900 py-12">
-    <div class="container mx-auto px-4 text-center text-white max-w-6xl">
+  <footer class="bg-black text-gray-300 mt-12 py-4">
+    <div class="text-center">
       <h2 class="text-3xl font-extrabold mb-8 tracking-widest">
-        <span class="font-extrabold">Telah Dipercaya</span> Oleh Perusahaan Lain
+        <span class="font-extrabold">Hubungi Kami
       </h2>
-      <div class="grid grid-cols-3 gap-12 mb-8">
-        <div class="flex items-center justify-center bg-red-800 rounded-full h-20 w-40 mx-auto">
-          <span class="text-red-900 font-bold text-lg">logoipsum</span>
-        </div>
-        <div class="flex items-center justify-center text-blue-700 space-x-2 mx-auto">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-            <circle cx="12" cy="12" r="5" fill="white"/>
-            <circle cx="12" cy="12" r="3" fill="#3b82f6"/>
-          </svg>
-          <span class="font-semibold text-lg">Logoipsum</span>
-        </div>
-        <div class="flex items-center justify-center bg-red-700 rounded-full h-20 w-40 mx-auto">
-          <span class="text-red-900 font-bold text-lg">Logoipsum</span>
-        </div>
-      </div>
-      <div class="grid grid-cols-3 gap-12">
-        <div class="flex items-center justify-center bg-red-800 rounded-full h-20 w-40 mx-auto">
-          <span class="text-red-900 font-bold text-lg">logoipsum</span>
-        </div>
-        <div class="flex items-center justify-center text-blue-700 space-x-2 mx-auto">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-            <circle cx="12" cy="12" r="5" fill="white"/>
-            <circle cx="12" cy="12" r="3" fill="#3b82f6"/>
-          </svg>
-          <span class="font-semibold text-lg">Logoipsum</span>
-        </div>
-        <div class="flex items-center justify-center bg-red-700 rounded-full h-20 w-40 mx-auto">
-          <span class="text-red-900 font-bold text-lg">Logoipsum</span>
-        </div>
-      </div>
     </div>
-  </section>
-
-  <footer class="bg-black text-gray-300 mt-12">
     <div class="border border-red-900 max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-center gap-6">
       <div class="flex items-center space-x-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -245,7 +111,7 @@
           </li>
           <li class="flex items-center space-x-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.35 3.608 1.325.975.975 1.263 2.242 1.325 3.608.058 1.266.07 1.645.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.35 2.633-1.325 3.608-.975.975-2.242 1.263-3.608 1.325-1.266.058-1.645.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.35-3.608-1.325-.975-.975-1.263-2.242-1.325-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.35-2.633 1.325-3.608.975-.975 2.242-1.263 3.608-1.325C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.775.13 4.602.443 3.515 1.53 2.428 2.617 2.115 3.79 2.057 5.067.998 6.347.985 6.756.985 10.015s.013 3.668.072 4.948c.058 1.277.371 2.45 1.458 3.537 1.087 1.087 2.26 1.4 3.537 1.458 1.28.059 1.689.072 4.948.072s3.668-.013 4.948-.072c1.277-.058 2.45-.371 3.537-1.458 1.087-1.087 1.4-2.26 1.458-3.537.059-1.28.072-1.689.072-4.948s-.013-3.668-.072-4.948c-.058-1.277-.371-2.45-1.458-3.537-1.087-1.087-2.26-1.4-3.537-1.458C15.668.013 15.259 0 12 0z"/>
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.35 3.608 1.325.975.975 1.263 2.242 1.325 3.608.058 1.266.07 1.645.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.35 2.633-1.325 3.608-.975.975-2.242 1.263-3.608 1.325-1.266.058-1.645.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.35-3.608-1.325-.975-.975-1.263-2.242-1.325-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.058-1.277.371-2.45 1.458-3.537 1.087-1.087 2.26-1.4 3.537-1.458 1.28.059 1.689.072 4.948.072s3.668-.013 4.948-.072c1.277-.058 2.45-.371 3.537-1.458 1.087-1.087 1.4-2.26 1.458-3.537.059-1.28.072-1.689.072-4.948s-.013-3.668-.072-4.948c-.058-1.277-.371-2.45-1.458-3.537-1.087-1.087-2.26-1.4-3.537-1.458C15.668.013 15.259 0 12 0z"/>
               <path d="M12 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998z"/>
               <circle cx="18.406" cy="5.594" r="1.44"/>
             </svg>
@@ -275,10 +141,25 @@
   <div id="modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
     <div class="bg-white rounded-lg max-w-lg w-full p-6 relative">
       <button id="closeModal" class="absolute top-2 right-2 text-gray-700 hover:text-gray-900 text-2xl font-bold">&times;</button>
-      <h3 id="modalTitle" class="text-xl font-bold mb-4"></h3>
+      <h3 id="modalTitle" class="text-xl font-bold mb-4">-</h3>
       <p id="modalContent" class="text-gray-800"></p>
     </div>
   </div>
+
+  <!-- Loading Overlay -->
+  <div id="page-loading" class="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-[9999] transition-opacity duration-300">
+    <div class="flex flex-col items-center">
+      <svg class="animate-spin h-12 w-12 text-red-900 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+      </svg>
+      <span class="text-white text-lg font-semibold">Memuat halaman...</span>
+    </div>
+  </div>
+
+    <!-- jQuery & Owl Carousel JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
   <script>
     const modal = document.getElementById('modal');
@@ -287,31 +168,288 @@
     const closeModal = document.getElementById('closeModal');
     const readMoreButtons = document.querySelectorAll('.read-more-btn');
 
-    const serviceDetails = {
-      "ATM SECURITY CAMERA": "Detail layanan ATM Security Camera yang meliputi pemasangan, pemeliharaan, dan monitoring kamera keamanan ATM.",
-      "ATM SPAREPARTS": "Detail layanan penyediaan suku cadang ATM berkualitas tinggi dengan garansi dan dukungan teknis.",
-      "SOFTWARE DISTRIBUTION": "Detail layanan distribusi perangkat lunak untuk sistem ATM dan layanan perbankan lainnya.",
-      "CASH RECYCLING MACHINE (CRM)": "Detail layanan mesin daur ulang uang tunai yang efisien dan aman untuk operasional ATM."
+    // Kumpulan variabel konten dinamis
+    const kontenLayanan = {
+      "ATM SECURITY CAMERA": {
+        title: "ATM SECURITY CAMERA",
+        desc: "Detail layanan ATM Security Camera yang meliputi pemasangan, pemeliharaan, dan monitoring kamera keamanan ATM.",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80"
+      },
+      "ATM SPAREPARTS": {
+        title: "ATM SPAREPARTS",
+        desc: "Detail layanan penyediaan suku cadang ATM berkualitas tinggi dengan garansi dan dukungan teknis.",
+        image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=400&q=80"
+      },
+      "SOFTWARE DISTRIBUTION": {
+        title: "SOFTWARE DISTRIBUTION",
+        desc: "Detail layanan distribusi perangkat lunak untuk sistem ATM dan layanan perbankan lainnya.",
+        image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80"
+      },
+      "CASH RECYCLING MACHINE (CRM)": {
+        title: "CASH RECYCLING MACHINE (CRM)",
+        desc: "Detail layanan mesin daur ulang uang tunai yang efisien dan aman untuk operasional ATM.",
+        image: "https://static.vecteezy.com/system/resources/previews/048/860/255/non_2x/indonesian-map-on-red-flat-design-illustration-vector.jpg"
+      }
     };
 
-    readMoreButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const card = button.closest('div.cursor-pointer');
-        const title = card.querySelector('h3').textContent;
-        modalTitle.textContent = title;
-        modalContent.textContent = serviceDetails[title] || "Detail layanan tidak tersedia.";
-        modal.classList.remove('hidden');
+    // Kumpulan variabel konten dinamis untuk komponen lain
+    const kontenKomisarisDirektur = {
+      komisaris: {
+        nama: "Nama Komisaris",
+        jabatan: "Komisaris",
+        image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        desc: "Deskripsi singkat tentang Komisaris."
+      },
+      direktur: {
+        nama: "Nama Direktur",
+        jabatan: "Direktur",
+        image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        desc: "Deskripsi singkat tentang Direktur."
+      }
+    };
+
+    const kontenVisiMisi = {
+      visi: "Menjadi mitra teknologi terpercaya yang mendorong transformasi digital sektor perbankan melalui solusi layanan mandiri yang inovatif, andal, dan berkelanjutan.",
+      misi: [
+        "Menyediakan solusi perangkat keras dan lunak yang unggul, serta layanan pemeliharaan yang profesional untuk menunjang efisiensi dan keamanan sistem layanan mandiri perbankan.",
+        "Membangun kemitraan strategis jangka panjang dengan institusi keuangan, melalui komitmen terhadap inovasi, keunggulan layanan, dan distribusi nasional yang kuat."
+      ]
+    };
+
+    const kontenKoneksiWilayah = {
+      judul: "KONEKSI WILAYAH",
+      deskripsi: "Tersebar pada 250 daerah di Indonesia dengan teknisi yang profesional dan berpengalaman",
+      image: "https://static.vecteezy.com/system/resources/previews/048/860/255/non_2x/indonesian-map-on-red-flat-design-illustration-vector.jpg"
+    };
+
+    const kontenPerusahaanDipercaya = {
+      judul: "Telah Dipercaya Oleh Perusahaan Lain",
+      logo: [
+        { nama: "BCA", image: "https://shl.co.id/wp-content/uploads/2022/11/lg-BCA-1.png" }
+        // Tambahkan logo lain jika ada
+      ]
+    };
+
+    // Kumpulan variabel konten dinamis
+    const kontenTentangKami = {
+      judul: "TENTANG KAMI",
+      image: "https://2456764.fs1.hubspotusercontent-eu1.net/hub/2456764/hubfs/YoungPeopleBusinessMeeting_1200x627.jpg",
+      paragraf: [
+        "Argenta adalah perusahaan distribusi produk dan layanan teknologi informasi yang berfokus pada sektor perbankan di Indonesia. Didirikan oleh para profesional dengan pengalaman lebih dari 10 tahun di bidang perbankan, konsultasi, penjualan, dan layanan, Argenta menghadirkan solusi yang andal dan terintegrasi untuk mendukung transformasi digital perbankan.",
+        "Didukung oleh tim teknis berpengalaman hingga 20 tahun, dengan keahlian dalam pengoperasian ATM dan dukungan terhadap berbagai merek mesin ATM, Argenta berkomitmen memberikan layanan berkualitas tinggi yang sesuai dengan kebutuhan industri di Indonesia."
+      ]
+    };
+
+    // Hamburger menu logic
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+    function showMenu() {
+      navMenu.classList.remove('opacity-0', 'invisible', 'hidden');
+      navMenu.classList.add('opacity-100', 'visible');
+    }
+    function hideMenu() {
+      navMenu.classList.remove('opacity-100', 'visible');
+      navMenu.classList.add('opacity-0', 'invisible', 'hidden');
+    }
+    hamburger.addEventListener('click', () => {
+      const isOpen = navMenu.classList.contains('opacity-100');
+      if (isOpen) {
+        hideMenu();
+      } else {
+        showMenu();
+      }
+    });
+    // Close menu on link click (mobile)
+    navMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 768) {
+          hideMenu();
+        }
       });
     });
-
-    closeModal.addEventListener('click', () => {
-      modal.classList.add('hidden');
-    });
-
-    window.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.add('hidden');
+    // Responsive fix on resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        navMenu.classList.remove('opacity-0', 'invisible', 'hidden', 'flex-col', 'items-center', 'justify-center', 'space-y-8');
+        navMenu.classList.add('opacity-100', 'visible', 'flex', 'flex-row', 'space-x-8');
+      } else {
+        hideMenu();
+        navMenu.classList.remove('flex-row', 'space-x-8');
+        navMenu.classList.add('flex-col', 'items-center', 'justify-center', 'space-y-8');
       }
+    });
+    // Initial state
+    if (window.innerWidth >= 768) {
+      navMenu.classList.remove('opacity-0', 'invisible', 'hidden', 'flex-col', 'items-center', 'justify-center', 'space-y-8');
+      navMenu.classList.add('opacity-100', 'visible', 'flex', 'flex-row', 'space-x-8');
+    } else {
+      hideMenu();
+      navMenu.classList.remove('flex-row', 'space-x-8');
+      navMenu.classList.add('flex-col', 'items-center', 'justify-center', 'space-y-8');
+    }
+    // Render konten dinamis ke section
+    function renderVisiMisi() {
+      const visiMisi = document.getElementById('visi-misi');
+      visiMisi.innerHTML = `
+        <h2 class="text-3xl font-bold mb-8 tracking-widest">VISI & MISI</h2>
+        <div class="flex flex-col md:flex-row justify-center gap-12 max-w-5xl mx-auto text-left">
+          <div class="md:w-1/2">
+            <h3 class="text-xl font-semibold mb-4 tracking-wide">Visi</h3>
+            <p class="text-base leading-relaxed whitespace-pre-line">${kontenVisiMisi.visi}</p>
+          </div>
+          <div class="md:w-1/2">
+            <h3 class="text-xl font-semibold mb-4 tracking-wide">Misi</h3>
+            <ol class="list-decimal list-inside space-y-2 text-base leading-relaxed">
+              ${kontenVisiMisi.misi.map(m => `<li>${m}</li>`).join('')}
+            </ol>
+          </div>
+        </div>
+      `;
+    }
+    function renderKomisarisDirektur() {
+      const el = document.getElementById('komisaris-direktur');
+      el.innerHTML = `
+        <div class="container mx-auto px-4 text-center">
+          <h2 class="text-3xl font-bold mb-8 tracking-widest">KOMISARIS DAN DIREKTUR</h2>
+          <div class="flex flex-col md:flex-row justify-center gap-16 max-w-5xl mx-auto text-center">
+            <div class="md:w-1/2">
+              <h3 class="text-xl font-semibold mb-2">Komisaris</h3>
+              <div class="h-1 w-24 bg-red-900 mx-auto mb-6"></div>
+              <img src="${kontenKomisarisDirektur.komisaris.image}" alt="Komisaris" class="mx-auto rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out w-48 h-48 object-cover" />
+              <div class="mt-4 text-lg font-bold">${kontenKomisarisDirektur.komisaris.nama}</div>
+              <div class="text-sm text-gray-300 mb-2">${kontenKomisarisDirektur.komisaris.jabatan}</div>
+              <div class="text-sm text-gray-400">${kontenKomisarisDirektur.komisaris.desc}</div>
+            </div>
+            <div class="md:w-1/2">
+              <h3 class="text-xl font-semibold mb-2">Direktur</h3>
+              <div class="h-1 w-24 bg-red-900 mx-auto mb-6"></div>
+              <img src="${kontenKomisarisDirektur.direktur.image}" alt="Direktur" class="mx-auto rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out w-48 h-48 object-cover" />
+              <div class="mt-4 text-lg font-bold">${kontenKomisarisDirektur.direktur.nama}</div>
+              <div class="text-sm text-gray-300 mb-2">${kontenKomisarisDirektur.direktur.jabatan}</div>
+              <div class="text-sm text-gray-400">${kontenKomisarisDirektur.direktur.desc}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    function renderKoneksiWilayah() {
+      const el = document.getElementById('koneksi-wilayah');
+      el.innerHTML = `
+        <div class="container mx-auto px-4 text-center">
+          <h2 class="text-3xl font-bold mb-4 tracking-widest">${kontenKoneksiWilayah.judul}</h2>
+          <p class="mb-8 max-w-2xl mx-auto">${kontenKoneksiWilayah.deskripsi}</p>
+          <img src="${kontenKoneksiWilayah.image}" alt="Peta Indonesia" class="mx-auto max-w-full h-auto" />
+        </div>
+      `;
+    }
+    function renderLayanan() {
+      const el = document.getElementById('layanan');
+      el.innerHTML = `
+        <div class="container mx-auto px-4">
+          <h2 class="text-3xl font-bold mb-8 tracking-widest text-center">LAYANAN KAMI</h2>
+          <div class="owl-carousel layanan-carousel">
+            ${Object.values(kontenLayanan).map(l => `
+              <div class="bg-white text-black rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out cursor-pointer p-6 flex flex-col">
+                <div class="flex items-center mb-4">
+                  <svg class="w-10 h-10 text-red-900 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7L9 19L3 13"></path></svg>
+                  <h3 class="font-bold uppercase text-lg">${l.title}</h3>
+                </div>
+                <p class="text-sm mb-6 flex-grow">${l.desc}</p>
+                <button class="read-more-btn self-start bg-red-900 text-white px-4 py-2 rounded hover:bg-red-700 transition flex items-center gap-2">
+                  Read More
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+    function renderPerusahaanDipercaya() {
+      const el = document.getElementById('perusahaan-dipercaya');
+      el.innerHTML = `
+        <div class="container mx-auto px-4 text-center text-white max-w-6xl">
+          <h2 class="text-3xl font-extrabold mb-8 tracking-widest">
+            <span class="font-extrabold">${kontenPerusahaanDipercaya.judul.split(' ')[0]}</span> ${kontenPerusahaanDipercaya.judul.split(' ').slice(1).join(' ')}
+          </h2>
+          <div class="owl-carousel owl-theme mb-8">
+            ${kontenPerusahaanDipercaya.logo.map(l => `
+              <div class="flex items-center justify-center bg-red-800 rounded-full h-20 w-40 mx-auto" style="width: inherit;">
+                ${l.image ? `<img src="${l.image}" alt="${l.nama}" class="h-12 object-contain" style="height: 10rem;" />` : `<span class="text-red-900 font-bold text-lg">${l.nama}</span>`}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+    function renderTentangKami() {
+      const el = document.getElementById('tentang-kami');
+      el.innerHTML = `
+        <div class=\"md:w-1/2\">
+          <img src=\"${kontenTentangKami.image}\" alt=\"Meeting room\" class=\"w-full h-full object-cover\" />
+        </div>
+        <div class=\"md:w-1/2 p-8 flex flex-col justify-center text-white\">
+          <h2 class=\"text-3xl font-bold mb-4 tracking-wide\">${kontenTentangKami.judul}</h2>
+          ${kontenTentangKami.paragraf.map(p => `<p class=\"mb-4 text-base leading-relaxed\">${p}</p>`).join('')}
+        </div>
+      `;
+    }
+    // Loading overlay logic
+    function showLoading() {
+      document.getElementById('page-loading').style.opacity = '1';
+      document.getElementById('page-loading').style.pointerEvents = 'auto';
+    }
+    function hideLoading() {
+      document.getElementById('page-loading').style.opacity = '0';
+      document.getElementById('page-loading').style.pointerEvents = 'none';
+      setTimeout(() => {
+        document.getElementById('page-loading').style.display = 'none';
+      }, 400);
+    }
+    // Show loading on menu click
+    document.addEventListener('DOMContentLoaded', function() {
+      renderVisiMisi();
+      renderKomisarisDirektur();
+      renderKoneksiWilayah();
+      renderLayanan();
+      renderPerusahaanDipercaya();
+      renderTentangKami();
+      // Inisialisasi ulang Owl Carousel setelah render
+      setTimeout(function() {
+        $('.layanan-carousel').owlCarousel({
+          loop:true,
+          margin:24,
+          nav:true,
+          dots:true,
+          responsive:{
+            0:{items:1},
+            600:{items:2},
+            1000:{items:3}
+          }
+        });
+        $('.owl-carousel.owl-theme').owlCarousel({
+          loop:true,
+          margin:24,
+          nav:true,
+          dots:true,
+          responsive:{
+            0:{items:1},
+            600:{items:2},
+            1000:{items:3}
+          }
+        });
+      }, 100);
+      document.querySelectorAll('#navMenu a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = link.getAttribute('href');
+          if (href && href !== '#' && !href.startsWith('javascript:')) {
+            showLoading();
+          }
+        });
+      });
+      // Hide loading after page load
+      window.addEventListener('load', hideLoading);
+      setTimeout(hideLoading, 2000); // Fallback hide
     });
   </script>
 </body>
