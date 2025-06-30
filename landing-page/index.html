@@ -175,22 +175,122 @@
     };
     let kontenHero = defaultHeroData;
 
-    // Fungsi untuk load data JSON eksternal
+    // Fungsi helper untuk menangani URL gambar
+    function getImageUrl(imagePath) {
+      if (!imagePath) return '';
+      // Jika sudah memiliki protocol (http/https) atau data URI, return as is
+      if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('data:')) {
+        return imagePath;
+      }
+      // Jika path relatif, tambahkan base URL
+      return `https://allhub.progesio.my.id/storage/${imagePath}`;
+    }
+
+    // Default data fallback
+    const defaultData = {
+      kontenLayanan: {
+        "default": {
+          title: "Layanan Default", 
+          desc: "Deskripsi layanan default",
+          image: "default.jpg"
+        }
+      },
+      kontenKomisarisDirektur: {
+        komisaris: {
+          nama: "Nama Komisaris",
+          jabatan: "Komisaris",
+          desc: "Deskripsi komisaris",
+          image: "https://via.placeholder.com/300"
+        },
+        direktur: {
+          nama: "Nama Direktur", 
+          jabatan: "Direktur",
+          desc: "Deskripsi direktur",
+          image: "https://via.placeholder.com/300"
+        }
+      },
+      kontenVisiMisi: {
+        visi: "Visi default perusahaan",
+        misi: ["Misi 1", "Misi 2", "Misi 3"]
+      },
+      kontenKoneksiWilayah: {
+        judul: "Koneksi Wilayah",
+        deskripsi: "Deskripsi koneksi wilayah",
+        image: "https://via.placeholder.com/600x400"
+      },
+      kontenPerusahaanDipercaya: {
+        judul: "Perusahaan Dipercaya",
+        logo: [
+          { nama: "Partner 1", image: null },
+          { nama: "Partner 2", image: null }
+        ]
+      },
+      kontenTentangKami: {
+        judul: "Tentang Kami",
+        image: "https://via.placeholder.com/600x400",
+        paragraf: ["Paragraf tentang kami 1", "Paragraf tentang kami 2"]
+      }
+    };
+
+    // Fungsi untuk load data dari API eksternal
     async function loadKontenJSON() {
       try {
-        const res = await fetch('hook/index.json');
-        if (!res.ok) throw new Error('Gagal memuat data JSON');
-        const data = await res.json();
+        const res = await fetch('https://allhub.progesio.my.id');
+        if (!res.ok) throw new Error('Gagal memuat data dari API');
+        
+        const response = await res.json();
+        
+        // Validasi struktur response
+        if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+          throw new Error('Format response API tidak valid');
+        }
+        
+        const data = response.data[0]; // Ambil data pertama dari array
+        
+        // Assign data dengan fallback ke default jika tidak ada atau null
         kontenHero = data.kontenHero || defaultHeroData;
-        kontenLayanan = data.kontenLayanan;
-        kontenKomisarisDirektur = data.kontenKomisarisDirektur;
-        kontenVisiMisi = data.kontenVisiMisi;
-        kontenKoneksiWilayah = data.kontenKoneksiWilayah;
-        kontenPerusahaanDipercaya = data.kontenPerusahaanDipercaya;
-        kontenTentangKami = data.kontenTentangKami;
+        kontenLayanan = data.kontenLayanan || defaultData.kontenLayanan;
+        
+        // Handle null values untuk komisaris dan direktur
+        if (data.kontenKomisarisDirektur && 
+            (data.kontenKomisarisDirektur.komisaris || data.kontenKomisarisDirektur.direktur)) {
+          kontenKomisarisDirektur = {
+            komisaris: data.kontenKomisarisDirektur.komisaris || null,
+            direktur: data.kontenKomisarisDirektur.direktur || null
+          };
+        } else {
+          kontenKomisarisDirektur = defaultData.kontenKomisarisDirektur;
+        }
+        
+        kontenVisiMisi = data.kontenVisiMisi || defaultData.kontenVisiMisi;
+        kontenKoneksiWilayah = data.kontenKoneksiWilayah || defaultData.kontenKoneksiWilayah;
+        
+        // Handle null values untuk logo perusahaan
+        if (data.kontenPerusahaanDipercaya) {
+          kontenPerusahaanDipercaya = {
+            judul: data.kontenPerusahaanDipercaya.judul || defaultData.kontenPerusahaanDipercaya.judul,
+            logo: data.kontenPerusahaanDipercaya.logo || null
+          };
+        } else {
+          kontenPerusahaanDipercaya = defaultData.kontenPerusahaanDipercaya;
+        }
+        
+        kontenTentangKami = data.kontenTentangKami || defaultData.kontenTentangKami;
+        
+        console.log('Data berhasil dimuat dari API:', data);
+        
       } catch (e) {
-        alert('Gagal memuat konten halaman!');
-        throw e;
+        console.error('Error loading API data:', e);
+        
+        // Fallback ke data default jika API gagal
+        kontenLayanan = defaultData.kontenLayanan;
+        kontenKomisarisDirektur = defaultData.kontenKomisarisDirektur;
+        kontenVisiMisi = defaultData.kontenVisiMisi;
+        kontenKoneksiWilayah = defaultData.kontenKoneksiWilayah;
+        kontenPerusahaanDipercaya = defaultData.kontenPerusahaanDipercaya;
+        kontenTentangKami = defaultData.kontenTentangKami;
+        
+        alert('Gagal memuat konten dari server, menggunakan konten default!');
       }
     }
 
@@ -249,11 +349,11 @@
       el.innerHTML = `
         <div class="owl-carousel hero-carousel">
           ${slides.map(hero => `
-            <section class=\"relative h-[80vh] flex items-center justify-center text-center px-4 mt-16 bg-cover bg-center\" style=\"background-image: url('${hero.background}');\">
+            <section class=\"relative h-[80vh] flex items-center justify-center text-center px-4 mt-16 bg-cover bg-center\" style=\"background-image: url('${getImageUrl(hero.background)}');\">
               <div class=\"absolute inset-0 bg-black\" style=\"opacity: ${hero.overlay};\"></div>
               <div class=\"relative max-w-xl text-white\">
                 <h1 class=\"text-4xl md:text-5xl font-extrabold mb-4\">${hero.title}</h1>
-                <p class=\"text-lg md:text-xl font-normal\">${hero.subtitle}</p>
+                <div class=\"text-lg md:text-xl font-normal\">${hero.subtitle}</div>
               </div>
             </section>
           `).join('')}
@@ -280,15 +380,29 @@
     }
     function renderKomisarisDirektur() {
       const el = document.getElementById('komisaris-direktur');
+      
+      // Cek apakah data komisaris dan direktur ada dan tidak null
+      if (!kontenKomisarisDirektur || 
+          (!kontenKomisarisDirektur.komisaris && !kontenKomisarisDirektur.direktur)) {
+        el.innerHTML = `
+          <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-8 tracking-widest">KOMISARIS DAN DIREKTUR</h2>
+            <p class="text-lg">Data komisaris dan direktur sedang tidak tersedia.</p>
+          </div>
+        `;
+        return;
+      }
+      
       el.innerHTML = `
         <div class="container mx-auto px-4 text-center">
           <h2 class="text-3xl font-bold mb-8 tracking-widest">KOMISARIS DAN DIREKTUR</h2>
           <div class="flex flex-col md:flex-row justify-center gap-16 max-w-5xl mx-auto text-center">
+            ${kontenKomisarisDirektur.komisaris ? `
             <div class="md:w-1/2">
               <h3 class="text-4xl font-normal mb-2">Komisaris</h3>
               <div class="h-3 w-3/4 bg-red-900 mx-auto mb-6"></div>
               <div class="relative group mx-auto w-72 h-72 rounded overflow-hidden shadow-lg">
-                <img src="${kontenKomisarisDirektur.komisaris.image}" alt="Komisaris" class="object-cover w-full h-full grayscale group-hover:grayscale-0 transition duration-300 group-hover:scale-125" />
+                <img src="${getImageUrl(kontenKomisarisDirektur.komisaris.image)}" alt="Komisaris" class="object-cover w-full h-full grayscale group-hover:grayscale-0 transition duration-300 group-hover:scale-125" />
                 <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-red-900/90 to-transparent p-4 flex flex-col items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div class="text-lg font-bold text-white">${kontenKomisarisDirektur.komisaris.nama}</div>
                   <div class="text-sm text-white">${kontenKomisarisDirektur.komisaris.jabatan}</div>
@@ -296,11 +410,13 @@
                 </div>
               </div>
             </div>
+            ` : ''}
+            ${kontenKomisarisDirektur.direktur ? `
             <div class="md:w-1/2">
               <h3 class="text-4xl font-normal mb-2">Direktur</h3>
               <div class="h-3 w-3/4 bg-red-900 mx-auto mb-6"></div>
               <div class="relative group mx-auto w-72 h-72 rounded overflow-hidden shadow-lg">
-                <img src="${kontenKomisarisDirektur.direktur.image}" alt="Direktur" class="object-cover w-full h-full grayscale group-hover:grayscale-0 transition duration-300 group-hover:scale-125" />
+                <img src="${getImageUrl(kontenKomisarisDirektur.direktur.image)}" alt="Direktur" class="object-cover w-full h-full grayscale group-hover:grayscale-0 transition duration-300 group-hover:scale-125" />
                 <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-red-900/90 to-transparent p-4 flex flex-col items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div class="text-lg font-bold text-white">${kontenKomisarisDirektur.direktur.nama}</div>
                   <div class="text-sm text-white">${kontenKomisarisDirektur.direktur.jabatan}</div>
@@ -308,6 +424,7 @@
                 </div>
               </div>
             </div>
+            ` : ''}
           </div>
         </div>
       `;
@@ -318,7 +435,7 @@
         <div class="container mx-auto px-4 text-center">
           <h2 class="text-3xl font-bold mb-4 tracking-widest">${kontenKoneksiWilayah.judul}</h2>
           <p class="mb-8 max-w-2xl mx-auto">${kontenKoneksiWilayah.deskripsi}</p>
-          <img src="${kontenKoneksiWilayah.image}" alt="Peta Indonesia" class="mx-auto max-w-full h-auto" />
+          <img src="${getImageUrl(kontenKoneksiWilayah.image)}" alt="Peta Indonesia" class="mx-auto max-w-full h-auto" />
         </div>
       `;
     }
@@ -347,6 +464,20 @@
     }
     function renderPerusahaanDipercaya() {
       const el = document.getElementById('perusahaan-dipercaya');
+      
+      // Cek apakah data logo ada dan tidak null
+      if (!kontenPerusahaanDipercaya || !kontenPerusahaanDipercaya.logo) {
+        el.innerHTML = `
+          <div class="container mx-auto px-4 text-center text-white max-w-6xl">
+            <h2 class="text-3xl font-extrabold mb-8 tracking-widest">
+              ${kontenPerusahaanDipercaya?.judul || 'Perusahaan Dipercaya'}
+            </h2>
+            <p class="text-lg">Data perusahaan mitra sedang tidak tersedia.</p>
+          </div>
+        `;
+        return;
+      }
+      
       el.innerHTML = `
         <div class="container mx-auto px-4 text-center text-white max-w-6xl">
           <h2 class="text-3xl font-extrabold mb-8 tracking-widest">
@@ -355,7 +486,7 @@
           <div class="owl-carousel owl-theme mb-8">
             ${kontenPerusahaanDipercaya.logo.map(l => `
               <div class="flex items-center justify-center rounded-full h-20 w-40 mx-auto" style="width: inherit;">
-                ${l.image ? `<img src="${l.image}" alt="${l.nama}" class="h-12 object-contain"  />` : `<span class="text-red-900 font-bold text-lg">${l.nama}</span>`}
+                ${l.image ? `<img src="${getImageUrl(l.image)}" alt="${l.nama}" class="h-12 object-contain"  />` : `<span class="text-red-900 font-bold text-lg">${l.nama}</span>`}
               </div>
             `).join('')}
           </div>
@@ -366,7 +497,7 @@
       const el = document.getElementById('tentang-kami');
       el.innerHTML = `
         <div class=\"md:w-1/2\">
-          <img src=\"${kontenTentangKami.image}\" alt=\"Meeting room\" class=\"w-full h-full object-cover\" />
+          <img src=\"${getImageUrl(kontenTentangKami.image)}\" alt=\"Meeting room\" class=\"w-full h-full object-cover\" />
         </div>
         <div class=\"md:w-1/2 p-8 flex flex-col justify-center text-white\">
           <h2 class=\"text-3xl font-bold mb-4 tracking-wide\">${kontenTentangKami.judul}</h2>
