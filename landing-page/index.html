@@ -235,7 +235,7 @@
     // Fungsi untuk load data dari API eksternal
     async function loadKontenJSON() {
       try {
-        const res = await fetch('https://allhub.progesio.my.id');
+        const res = await fetch('https://allhub.progesio.my.id/api/hub/argenta/index');
         if (!res.ok) throw new Error('Gagal memuat data dari API');
         
         const response = await res.json();

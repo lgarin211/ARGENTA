@@ -7,6 +7,20 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      .html-content p { margin-bottom: 1rem; line-height: 1.6; }
+      .html-content img { max-width: 100%; height: auto; margin: 1rem 0; border-radius: 0.5rem; }
+      .html-content h1, .html-content h2, .html-content h3 { font-weight: bold; margin: 1.5rem 0 1rem 0; }
+      .html-content h1 { font-size: 1.875rem; }
+      .html-content h2 { font-size: 1.5rem; }
+      .html-content h3 { font-size: 1.25rem; }
+      .html-content ul, .html-content ol { margin: 1rem 0; padding-left: 2rem; }
+      .html-content li { margin-bottom: 0.5rem; }
+      .html-content strong { font-weight: bold; }
+      .html-content em { font-style: italic; }
+      .html-content a { color: #ef4444; text-decoration: underline; }
+      .html-content a:hover { color: #dc2626; }
+    </style>
   </head>
   <body class="bg-red-900 text-white font-montserrat leading-relaxed">
     <!-- Loading Overlay -->
@@ -209,11 +223,14 @@
       setTimeout(hideLoading, 2000);
     });
     // Helper to resolve image URLs
-    function getImageUrl(path) {
-      if (!path) return '';
-      if (/^(http|https):\/\//.test(path)) return path;
-      // Assume relative to /landing-page/
-      return 'landing-page/' + path.replace(/^\/?/, '');
+    function getImageUrl(imagePath) {
+      if (!imagePath) return '';
+      // Jika sudah memiliki protocol (http/https) atau data URI, return as is
+      if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('data:')) {
+        return imagePath;
+      }
+      // Jika path relatif, tambahkan base URL
+      return `https://allhub.progesio.my.id/storage/${imagePath}`;
     }
 
     // --- Dynamic News Detail Loading ---
@@ -281,23 +298,49 @@
         showNewsDetailError('ID berita tidak ditemukan.');
         return;
       }
-      fetch('hook/berita.json')
+      
+      function handleBeritaDetailData(data) {
+        // Support both new API format (data: [...]) and legacy format ([...])
+        let beritaArray = [];
+        if (data && Array.isArray(data.data)) {
+          beritaArray = data.data;
+        } else if (Array.isArray(data)) {
+          beritaArray = data;
+        }
+        
+        const news = beritaArray.find(item => String(item.id) === String(id));
+        if (!news) {
+          showNewsDetailError('Berita tidak ditemukan.');
+          return;
+        }
+        renderNewsDetailHero(news);
+        renderNewsDetailContent(news);
+      }
+      
+      // Try API first, fallback to local JSON
+      fetch('https://allhub.progesio.my.id/api/hub/argenta/berita')
         .then(res => {
-          if (!res.ok) throw new Error('Gagal memuat data berita.');
+          if (!res.ok) throw new Error('API tidak tersedia');
           return res.json();
         })
         .then(data => {
-          if (!Array.isArray(data)) throw new Error('Format data tidak valid.');
-          const news = data.find(item => String(item.id) === String(id));
-          if (!news) {
-            showNewsDetailError('Berita tidak ditemukan.');
-            return;
-          }
-          renderNewsDetailHero(news);
-          renderNewsDetailContent(news);
+          handleBeritaDetailData(data);
         })
         .catch(err => {
-          showNewsDetailError('Gagal memuat berita. Silakan coba lagi nanti.');
+          console.log('API gagal, menggunakan fallback local JSON:', err.message);
+          // Fallback to local JSON
+          fetch('hook/berita.json')
+            .then(res => {
+              if (!res.ok) throw new Error('Gagal memuat data berita.');
+              return res.json();
+            })
+            .then(data => {
+              handleBeritaDetailData(data);
+            })
+            .catch(fallbackErr => {
+              console.error('Fallback juga gagal:', fallbackErr);
+              showNewsDetailError('Gagal memuat berita. Silakan coba lagi nanti.');
+            });
         });
     });
     </script>

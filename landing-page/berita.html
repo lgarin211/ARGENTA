@@ -7,6 +7,20 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      .html-content p { margin-bottom: 1rem; line-height: 1.6; }
+      .html-content img { max-width: 100%; height: auto; margin: 1rem 0; border-radius: 0.5rem; }
+      .html-content h1, .html-content h2, .html-content h3 { font-weight: bold; margin: 1.5rem 0 1rem 0; }
+      .html-content h1 { font-size: 1.875rem; }
+      .html-content h2 { font-size: 1.5rem; }
+      .html-content h3 { font-size: 1.25rem; }
+      .html-content ul, .html-content ol { margin: 1rem 0; padding-left: 2rem; }
+      .html-content li { margin-bottom: 0.5rem; }
+      .html-content strong { font-weight: bold; }
+      .html-content em { font-style: italic; }
+      .html-content a { color: #ef4444; text-decoration: underline; }
+      .html-content a:hover { color: #dc2626; }
+    </style>
   </head>
   <body class="bg-red-900 text-white font-montserrat leading-relaxed">
     <header class="fixed w-full top-0 z-50 bg-gradient-to-b from-red-900 via-red-900/90 to-transparent">
@@ -144,10 +158,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script>
   // Helper for image base URL
-  function getImageUrl(path) {
-    if (!path) return 'https://via.placeholder.com/600x400?text=No+Image';
-    if (/^https?:\/\//.test(path)) return path;
-    return 'hook/' + path.replace(/^\/+/, '');
+  function getImageUrl(imagePath) {
+    if (!imagePath) return 'https://via.placeholder.com/600x400?text=No+Image';
+    // Jika sudah memiliki protocol (http/https) atau data URI, return as is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('data:')) {
+      return imagePath;
+    }
+    // Jika path relatif, tambahkan base URL
+    return `https://allhub.progesio.my.id/storage/${imagePath}`;
   }
 
   // Hamburger menu logic
@@ -230,10 +248,24 @@
         return;
       }
       const first = news[0];
-      hero.style.backgroundImage = `url('${getImageUrl(first.image)}')`;
+      hero.style.backgroundImage = `url('${getImageUrl(first.cover)}')`;
+      
+      // Create ringkasan with HTML support
+      let ringkasanHtml = '';
+      if (first.ringkasan) {
+        // If ringkasan contains HTML tags, render as HTML, otherwise as text
+        if (first.ringkasan.includes('<') && first.ringkasan.includes('>')) {
+          ringkasanHtml = `<div class="html-content">${first.ringkasan}</div>`;
+        } else {
+          ringkasanHtml = `<p>${first.ringkasan}</p>`;
+        }
+      } else {
+        ringkasanHtml = `<p>${first.lokasi ? first.location + ', ' : ''}${first.tanggal || '-'}</p>`;
+      }
+      
       heroContent.innerHTML = `
         <h1 class="text-4xl md:text-5xl font-extrabold mb-4 max-w-lg leading-tight">${first.title || '-'}</h1>
-        <p class="text-lg md:text-xl font-normal max-w-md mb-6">${first.location ? first.location + ', ' : ''}${first.date || '-'}</p>
+        <div class="text-lg md:text-xl font-normal max-w-md mb-6">${ringkasanHtml}</div>
         <a href="detailberita.html?id=${encodeURIComponent(first.id)}" class="bg-red-900 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded transition inline-block">Lihat Detail</a>
       `;
     }
@@ -246,10 +278,10 @@
       }
       list.innerHTML = news.map(item => `
         <div class="bg-red-800 rounded shadow overflow-hidden cursor-pointer group">
-          <img src="${getImageUrl(item.image)}" alt="${item.title || ''}" class="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition duration-300" />
+          <img src="${getImageUrl(item.cover)}" alt="${item.title || ''}" class="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition duration-300" />
           <div class="p-4">
             <h3 class="font-semibold text-lg text-white">${item.title || '-'}</h3>
-            <p class="text-sm text-gray-300">${item.location ? item.location + ', ' : ''}${item.date || '-'}</p>
+            <p class="text-sm text-gray-300">${item.lokasi ? item.lokasi + ', ' : ''}${item.tanggal || '-'}</p>
           </div>
           <a href="detailberita.html?id=${encodeURIComponent(item.id)}" class="block mt-2 text-white font-semibold hover:text-red-500 transition flex items-center justify-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -261,20 +293,45 @@
       `).join('');
     }
 
+    function handleBeritaData(data) {
+      // Support both new API format (data: [...]) and legacy format ([...])
+      let beritaArray = [];
+      if (data && Array.isArray(data.data)) {
+        beritaArray = data.data;
+      } else if (Array.isArray(data)) {
+        beritaArray = data;
+      }
+      
+      renderNewsHero(beritaArray);
+      renderNewsList(beritaArray);
+    }
+
     function fetchNews() {
-      fetch('hook/berita.json')
+      // Try API first, fallback to local JSON
+      fetch('https://allhub.progesio.my.id/api/hub/argenta/berita')
         .then(res => {
-          if (!res.ok) throw new Error('Gagal memuat data berita');
+          if (!res.ok) throw new Error('API tidak tersedia');
           return res.json();
         })
         .then(data => {
-          if (!Array.isArray(data)) throw new Error('Format data tidak valid');
-          renderNewsHero(data);
-          renderNewsList(data);
+          handleBeritaData(data);
         })
         .catch(err => {
-          renderNewsHero([]);
-          renderNewsList([]);
+          console.log('API gagal, menggunakan fallback local JSON:', err.message);
+          // Fallback to local JSON
+          fetch('hook/berita.json')
+            .then(res => {
+              if (!res.ok) throw new Error('Gagal memuat data berita');
+              return res.json();
+            })
+            .then(data => {
+              handleBeritaData(data);
+            })
+            .catch(fallbackErr => {
+              console.error('Fallback juga gagal:', fallbackErr);
+              renderNewsHero([]);
+              renderNewsList([]);
+            });
         });
     }
     fetchNews();

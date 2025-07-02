@@ -7,6 +7,54 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      /* HTML Content Styling */
+      .html-content {
+        line-height: 1.6;
+      }
+      
+      .html-content p {
+        margin-bottom: 0.75rem;
+      }
+      
+      .html-content ul, .html-content ol {
+        margin-left: 1rem;
+        margin-bottom: 0.75rem;
+      }
+      
+      .html-content li {
+        margin-bottom: 0.25rem;
+      }
+      
+      .html-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.25rem;
+        margin: 0.5rem 0;
+      }
+      
+      .html-content h1, .html-content h2, .html-content h3 {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+      
+      .html-content h1 { font-size: 1.25rem; }
+      .html-content h2 { font-size: 1.125rem; }
+      .html-content h3 { font-size: 1rem; }
+      
+      .html-content strong, .html-content b {
+        font-weight: bold;
+      }
+      
+      .html-content em, .html-content i {
+        font-style: italic;
+      }
+      
+      .error-message {
+        color: #ef4444;
+        font-weight: 600;
+      }
+    </style>
   </head>
   <body class="bg-red-900 text-white font-montserrat leading-relaxed">
     <!-- Loading Overlay -->
@@ -153,6 +201,34 @@
         section.innerHTML = '<div class="text-center text-gray-300 py-16 text-xl">Data karir tidak ditemukan.</div>';
         return;
       }
+      
+      // Parse persyaratan jika berupa string JSON atau HTML
+      let persyaratanArray = [];
+      if (data.persyaratan) {
+        if (Array.isArray(data.persyaratan)) {
+          persyaratanArray = data.persyaratan;
+        } else if (typeof data.persyaratan === 'string') {
+          try {
+            // Try parsing as JSON array
+            const parsed = JSON.parse(data.persyaratan);
+            if (Array.isArray(parsed)) {
+              persyaratanArray = parsed;
+            } else {
+              persyaratanArray = [data.persyaratan];
+            }
+          } catch (e) {
+            // If not JSON, render as HTML directly without parsing
+            persyaratanArray = [data.persyaratan];
+          }
+        }
+      }
+      
+      // Render HTML content safely (for description and persyaratan)
+      const renderHtmlContent = (text) => {
+        if (!text) return '-';
+        return text; // Keep HTML tags for rendering
+      };
+      
       section.innerHTML = `
         <h1 class="text-3xl font-bold mb-2">${data.title || '-'}</h1>
         <p class="mb-4 text-lg">${data.kategori || '-'}</p>
@@ -166,16 +242,16 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="md:col-span-2 bg-red-800 p-6 rounded">
             <h2 class="font-bold text-lg mb-3">Tentang Pekerjaan</h2>
-            <p>${data.tentang || data.deskripsi || '-'}</p>
+            <div class="html-content space-y-2 text-sm">${renderHtmlContent(data.deskripsi || data.tentang)}</div>
           </div>
           <div class="space-y-6">
             <div class="bg-red-800 p-6 rounded">
               <h2 class="font-bold text-lg mb-3">Persyaratan</h2>
-              <ul class="list-disc list-inside space-y-1 text-sm">
-                ${(Array.isArray(data.persyaratan) && data.persyaratan.length > 0)
-                  ? data.persyaratan.map(item => `<li>${item}</li>`).join('')
-                  : '<li>-</li>'}
-              </ul>
+              <div class="html-content space-y-2 text-sm">
+                ${persyaratanArray.length > 0
+                  ? persyaratanArray.map(item => `<div>${renderHtmlContent(item)}</div>`).join('')
+                  : '<div>-</div>'}
+              </div>
             </div>
             <div class="bg-red-800 p-6 rounded">
               <h2 class="font-bold text-lg mb-3">Batas Usia</h2>
@@ -197,19 +273,45 @@
         renderKarirDetail(null);
         return;
       }
+      const apiUrl = `https://allhub.progesio.my.id/api/hub/argenta/karir`
       const localUrl = 'hook/karir.json';
-      fetch(localUrl)
+      fetch(apiUrl)
         .then(r => r.ok ? r.json() : Promise.reject())
         .then(raw => {
           let data = null;
           if (Array.isArray(raw)) {
             data = raw.find(item => String(item.id) === String(id));
-          } else if (raw && raw.data && Array.isArray(raw.data) && raw.data[0] && Array.isArray(raw.data[0].karir)) {
-            data = raw.data[0].karir.find(item => String(item.id) === String(id));
+          } else if (raw && raw.data && Array.isArray(raw.data)) {
+            // Support sample API: { data: [ {...}, ... ], ... }
+            if (raw.data[0] && Array.isArray(raw.data[0].karir)) {
+              // Legacy format: data[0].karir
+              data = raw.data[0].karir.find(item => String(item.id) === String(id));
+            } else {
+              // New API format: data is array of karir objects
+              data = raw.data.find(item => String(item.id) === String(id));
+            }
           }
           renderKarirDetail(data);
         })
-        .catch(() => renderKarirDetail(null));
+        .catch(() => {
+          // Fallback to local JSON
+          fetch(localUrl)
+            .then(r => r.ok ? r.json() : Promise.reject())
+            .then(raw => {
+              let data = null;
+              if (Array.isArray(raw)) {
+                data = raw.find(item => String(item.id) === String(id));
+              } else if (raw && raw.data && Array.isArray(raw.data)) {
+                if (raw.data[0] && Array.isArray(raw.data[0].karir)) {
+                  data = raw.data[0].karir.find(item => String(item.id) === String(id));
+                } else {
+                  data = raw.data.find(item => String(item.id) === String(id));
+                }
+              }
+              renderKarirDetail(data);
+            })
+            .catch(() => renderKarirDetail(null));
+        });
     }
     // Hamburger menu logic
     const hamburger = document.getElementById('hamburger');

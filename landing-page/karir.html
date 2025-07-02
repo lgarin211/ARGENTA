@@ -259,7 +259,7 @@
             <h3 class="font-bold text-xl mb-1">${item.title || '-'}</h3>
             <p class="mb-1">${item.lokasi || '-'}</p>
             <p>${item.kategori || '-'}</p>
-            <p class="mt-2 text-sm text-gray-200">${item.deskripsi || ''}</p>
+            <p class="mt-2 text-sm text-gray-200">${item.tentang || ''}</p>
           </div>
           <a href="${item.detail_url || '#'}" class="bg-red-900 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded transition whitespace-nowrap">Lihat Detail</a>
         </div>
@@ -318,11 +318,17 @@
     }
 
     function handleKarirData(raw) {
-      // Support both array and wrapped object (legacy)
+      // Support sample API: { data: [ {...}, ... ], ... }
       if (Array.isArray(raw)) {
         karirData = raw;
-      } else if (raw && raw.data && Array.isArray(raw.data) && raw.data[0] && Array.isArray(raw.data[0].karir)) {
-        karirData = raw.data[0].karir;
+      } else if (raw && raw.data && Array.isArray(raw.data)) {
+        // If data[0].karir exists and is array, use it (legacy)
+        if (raw.data[0] && Array.isArray(raw.data[0].karir)) {
+          karirData = raw.data[0].karir;
+        } else {
+          // Otherwise, assume data is array of karir objects (API sample)
+          karirData = raw.data;
+        }
       } else {
         karirData = [];
       }
@@ -334,9 +340,10 @@
 
     function loadKarirData() {
       // Try to fetch from API, fallback to local JSON
-      const apiUrl = 'https://allhub.progesio.my.id/hook/karir.json';
+      const apiUrl = 'https://allhub.progesio.my.id/api/hub/argenta/karir';
+      
       const localUrl = 'hook/karir.json';
-      fetch(localUrl)
+      fetch(apiUrl)
         .then(r => r.ok ? r.json() : Promise.reject())
         .then(handleKarirData)
         .catch(() => {
