@@ -39,23 +39,11 @@
       </nav>
     </header>
 
-    <section class="relative h-[60vh] flex items-center justify-center text-left px-8 mt-16 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=1350&q=80');">
-      <div class="absolute inset-0 bg-red-900 bg-opacity-80"></div>
-      <div class="relative max-w-4xl text-white">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 max-w-lg leading-tight">Penguatan Kompetensi Engineering di Jabodetabek</h1>
-        <p class="text-lg md:text-xl font-normal max-w-md">Jakarta, 16 Mei 2025</p>
-      </div>
-    </section>
+    <!-- Dynamic News Detail Hero -->
+    <section id="news-detail-hero"></section>
 
-    <section class="container mx-auto max-w-4xl px-4 py-8 space-y-6">
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada ac urna sed tincidunt. Duis sit amet enim non magna ultricies porttitor condimentum eu elit. Maecenas metus purus, tincidunt ultrices tortor eu, facilisis pharetra nulla. Aenean viverra orci eget enim commodo placerat. Vestibulum tellus ipsum, tristique eget nunc in, accumsan vehicula enim. Morbi et neque ac metus accumsan molestie. Aliquam ultricies urna vel ex consectetur facilisis. Suspendisse potenti. Fusce pharetra neque at felis bibendum facilisis. Curabitur at pharetra nunc. Morbi fermentum nisl nunc, vel dictum orci venenatis et. Sed commodo mauris magna.
-      </p>
-      <img src="https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=800&q=80" alt="Penguatan Kompetensi Engineering" class="mx-auto rounded shadow-lg" />
-      <p>
-        Praesent suscipit hendrerit est quis aliquet. Donec cursus lorem sit amet ipsum mattis lacinia. Sed felis neque, molestie sed nisl at, auctor sollicitudin tortor. Etiam interdum eleifend quam, sit amet euismod magna sollicitudin a. Morbi at vehicula nulla. Fusce non mattis odio. Morbi in imperdiet massa. Phasellus lacus leo, vehicula porttitor augue vitae, venenatis gravida nisi. Cras vel nulla ut ligula mattis facilisis rhoncus ut metus. Phasellus quis pretium erat.
-      </p>
-    </section>
+    <!-- Dynamic News Detail Content -->
+    <section id="news-detail-content" class="container mx-auto max-w-4xl px-4 py-8 space-y-6"></section>
 
     <footer class="bg-black text-gray-300 mt-12 py-4">
       <div class="text-center">
@@ -220,6 +208,97 @@
       window.addEventListener('load', hideLoading);
       setTimeout(hideLoading, 2000);
     });
-    </script>
+    // Helper to resolve image URLs
+    function getImageUrl(path) {
+      if (!path) return '';
+      if (/^(http|https):\/\//.test(path)) return path;
+      // Assume relative to /landing-page/
+      return 'landing-page/' + path.replace(/^\/?/, '');
+    }
+
+    // --- Dynamic News Detail Loading ---
+    function getQueryParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+
+    function renderNewsDetailHero(news) {
+      const hero = document.getElementById('news-detail-hero');
+      if (!news) {
+        hero.innerHTML = `<div class='h-[60vh] flex items-center justify-center text-center px-8 mt-16 bg-red-900'><div class='text-white text-xl font-semibold'>Berita tidak ditemukan.</div></div>`;
+        return;
+      }
+      hero.innerHTML = `
+        <section class="relative h-[60vh] flex items-center justify-center text-left px-8 mt-16 bg-cover bg-center" style="background-image: url('${getImageUrl(news.cover)}');">
+          <div class="absolute inset-0 bg-red-900 bg-opacity-80"></div>
+          <div class="relative max-w-4xl text-white">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 max-w-lg leading-tight">${news.title || '-'}</h1>
+            <p class="text-lg md:text-xl font-normal max-w-md">${news.lokasi ? news.lokasi + ', ' : ''}${news.tanggal || ''}</p>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderNewsDetailContent(news) {
+      const content = document.getElementById('news-detail-content');
+      if (!news) {
+        content.innerHTML = `<div class='text-center text-white text-lg font-semibold py-12'>Berita tidak ditemukan.</div>`;
+        return;
+      }
+      let isiHtml = '';
+      if (Array.isArray(news.isi)) {
+        isiHtml = news.isi.map(par => `<p>${par}</p>`).join('');
+      } else if (typeof news.isi === 'string') {
+        isiHtml = `<p>${news.isi}</p>`;
+      }
+      content.innerHTML = `
+        <div class="mb-4">
+          <span class="inline-block bg-red-800 text-xs font-semibold px-3 py-1 rounded-full mb-2">${news.kategori || ''}</span>
+          <h2 class="text-2xl font-bold mb-2">${news.title || '-'}</h2>
+          <div class="text-gray-300 text-sm mb-2">${news.lokasi ? news.lokasi + ', ' : ''}${news.tanggal || ''} &bull; ${news.penulis || ''}</div>
+          <div class="text-base text-gray-200 mb-4">${news.ringkasan || ''}</div>
+        </div>
+        <img src="${getImageUrl(news.cover)}" alt="${news.title || ''}" class="mx-auto rounded shadow-lg mb-6" />
+        ${isiHtml}
+      `;
+    }
+
+    function showNewsDetailError(msg) {
+      renderNewsDetailHero(null);
+      renderNewsDetailContent(null);
+      if (msg) {
+        const content = document.getElementById('news-detail-content');
+        content.innerHTML = `<div class='text-center text-white text-lg font-semibold py-12'>${msg}</div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // ...existing nav and loading logic...
+
+      // Dynamic news detail logic
+      const id = getQueryParam('id');
+      if (!id) {
+        showNewsDetailError('ID berita tidak ditemukan.');
+        return;
+      }
+      fetch('hook/berita.json')
+        .then(res => {
+          if (!res.ok) throw new Error('Gagal memuat data berita.');
+          return res.json();
+        })
+        .then(data => {
+          if (!Array.isArray(data)) throw new Error('Format data tidak valid.');
+          const news = data.find(item => String(item.id) === String(id));
+          if (!news) {
+            showNewsDetailError('Berita tidak ditemukan.');
+            return;
+          }
+          renderNewsDetailHero(news);
+          renderNewsDetailContent(news);
+        })
+        .catch(err => {
+          showNewsDetailError('Gagal memuat berita. Silakan coba lagi nanti.');
+        });
+    });
   </body>
 </html>

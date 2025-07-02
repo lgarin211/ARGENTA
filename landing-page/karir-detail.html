@@ -39,46 +39,8 @@
       </nav>
     </header>
 
-    <section class="relative bg-gradient-to-b from-red-900 via-black to-black py-16 mt-16 px-6 max-w-6xl mx-auto rounded">
-      <h1 class="text-3xl font-bold mb-2">Project Manager Support</h1>
-      <p class="mb-4 text-lg">Business Relation, Promotion &amp; Communication</p>
-      <div class="flex items-center mb-8 space-x-4 text-gray-300">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2v-7H3v7a2 2 0 002 2z" />
-        </svg>
-        <span>1 Januari 2025 - 31 Desember 2025</span>
-        <button class="ml-auto bg-red-900 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded transition">Daftar</button>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="md:col-span-2 bg-red-800 p-6 rounded">
-          <h2 class="font-bold text-lg mb-3">Tentang Pekerjaan</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris malesuada ac urna sed tincidunt. Duis sit amet enim non magna ultricies porttitor condimentum eu elit. Maecenas metus purus, tincidunt ultrices tortor eu, facilisis pharetra nulla. Aenean viverra orci eget enim commodo placerat. Vestibulum tellus ipsum, tristique eget nunc in, accumsan vehicula enim. Morbi et neque ac metus accumsan molestie. Aliquam ultricies urna vel ex consectetur facilisis. Suspendisse potenti. Fusce pharetra neque at felis bibendum facilisis. Curabitur at pharetra nunc. Morbi fermentum nisl nunc, vel dictum orci venenatis et. Sed commodo mauris magna.
-          </p>
-        </div>
-        <div class="space-y-6">
-          <div class="bg-red-800 p-6 rounded">
-            <h2 class="font-bold text-lg mb-3">Persyaratan</h2>
-            <ul class="list-disc list-inside space-y-1 text-sm">
-              <li>Min. Sarjana S1 dengan IPK Min. 3,00</li>
-              <li>Memiliki latar belakang pendidikan dari jurusan Teknik Informatika / Sistem Informasi</li>
-              <li>Memiliki pengetahuan dasar dan ketertarikan di bidang IT</li>
-              <li>Memiliki pengalaman bekerja di bidang teknologi (IT) menjadi nilai tambah</li>
-              <li>Usia maks. 25 tahun (Strata 1) dan 26 tahun (Strata 2)</li>
-              <li>Penempatan di Kantor Pusat (Jakarta)</li>
-            </ul>
-          </div>
-          <div class="bg-red-800 p-6 rounded">
-            <h2 class="font-bold text-lg mb-3">Batas Usia</h2>
-            <p>18 - 25 Tahun</p>
-          </div>
-          <div class="bg-red-800 p-6 rounded">
-            <h2 class="font-bold text-lg mb-3">Penempatan</h2>
-            <p>Jakarta</p>
-          </div>
-        </div>
-      </div>
+    <section class="relative bg-gradient-to-b from-red-900 via-black to-black py-16 mt-16 px-6 max-w-6xl mx-auto rounded" id="karir-detail-section" style="min-height:400px">
+      <!-- Konten detail karir akan di-load oleh JS -->
     </section>
 
     <section class="text-center mt-12 mb-8">
@@ -178,6 +140,77 @@
   <!-- jQuery (wajib sebelum script navbar) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
+    // Helper: get query param
+    function getQueryParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+
+    // Render karir detail
+    function renderKarirDetail(data) {
+      const section = document.getElementById('karir-detail-section');
+      if (!data) {
+        section.innerHTML = '<div class="text-center text-gray-300 py-16 text-xl">Data karir tidak ditemukan.</div>';
+        return;
+      }
+      section.innerHTML = `
+        <h1 class="text-3xl font-bold mb-2">${data.title || '-'}</h1>
+        <p class="mb-4 text-lg">${data.kategori || '-'}</p>
+        <div class="flex items-center mb-8 space-x-4 text-gray-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2v-7H3v7a2 2 0 002 2z" />
+          </svg>
+          <span>${data.periode || '-'}</span>
+          <button class="ml-auto bg-red-900 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded transition">Daftar</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="md:col-span-2 bg-red-800 p-6 rounded">
+            <h2 class="font-bold text-lg mb-3">Tentang Pekerjaan</h2>
+            <p>${data.tentang || data.deskripsi || '-'}</p>
+          </div>
+          <div class="space-y-6">
+            <div class="bg-red-800 p-6 rounded">
+              <h2 class="font-bold text-lg mb-3">Persyaratan</h2>
+              <ul class="list-disc list-inside space-y-1 text-sm">
+                ${(Array.isArray(data.persyaratan) && data.persyaratan.length > 0)
+                  ? data.persyaratan.map(item => `<li>${item}</li>`).join('')
+                  : '<li>-</li>'}
+              </ul>
+            </div>
+            <div class="bg-red-800 p-6 rounded">
+              <h2 class="font-bold text-lg mb-3">Batas Usia</h2>
+              <p>${data.batas_usia || '-'}</p>
+            </div>
+            <div class="bg-red-800 p-6 rounded">
+              <h2 class="font-bold text-lg mb-3">Penempatan</h2>
+              <p>${data.penempatan || data.lokasi || '-'}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Load karir detail from karir.json
+    function loadKarirDetail() {
+      const id = getQueryParam('id');
+      if (!id) {
+        renderKarirDetail(null);
+        return;
+      }
+      const localUrl = 'hook/karir.json';
+      fetch(localUrl)
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(raw => {
+          let data = null;
+          if (Array.isArray(raw)) {
+            data = raw.find(item => String(item.id) === String(id));
+          } else if (raw && raw.data && Array.isArray(raw.data) && raw.data[0] && Array.isArray(raw.data[0].karir)) {
+            data = raw.data[0].karir.find(item => String(item.id) === String(id));
+          }
+          renderKarirDetail(data);
+        })
+        .catch(() => renderKarirDetail(null));
+    }
     // Hamburger menu logic
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('navMenu');
@@ -239,6 +272,7 @@
       }, 400);
     }
     document.addEventListener('DOMContentLoaded', function() {
+      loadKarirDetail();
       document.querySelectorAll('#navMenu a').forEach(link => {
         link.addEventListener('click', function(e) {
           const href = link.getAttribute('href');

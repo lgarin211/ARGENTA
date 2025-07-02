@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "Penguatan Kompetensi Engineering di Jabodetabek",
+    "tanggal": "2025-05-16",
+    "lokasi": "Jakarta",
+    "cover": "https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=800&q=80",
+    "kategori": "Kegiatan Perusahaan",
+    "ringkasan": "Argenta mengadakan pelatihan dan penguatan kompetensi engineering untuk tim Jabodetabek.",
+    "isi": [
+      "Argenta Teknika Intramas menggelar pelatihan intensif untuk meningkatkan kompetensi engineering di wilayah Jabodetabek.",
+      "Kegiatan ini diikuti oleh puluhan peserta dari berbagai divisi dan menghadirkan narasumber profesional di bidangnya.",
+      "Pelatihan berlangsung selama 3 hari dan diakhiri dengan sesi evaluasi serta penyerahan sertifikat."
+    ],
+    "penulis": "Tim Redaksi Argenta",
+    "detail_url": "berita-detail.html?id=1"
+  },
+  {
+    "id": 2,
+    "title": "Harmoni dalam Kebersamaan: Outing 2025",
+    "tanggal": "2025-04-10",
+    "lokasi": "Bandung",
+    "cover": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80",
+    "kategori": "Outing & Gathering",
+    "ringkasan": "Outing tahunan Argenta 2025 sukses digelar di Bandung dengan tema kebersamaan dan sinergi.",
+    "isi": [
+      "Kegiatan outing tahun ini diikuti seluruh karyawan Argenta dari berbagai cabang.",
+      "Berbagai lomba dan permainan tim digelar untuk mempererat kekompakan.",
+      "Acara ditutup dengan malam keakraban dan pembagian doorprize."
+    ],
+    "penulis": "Tim HRD Argenta",
+    "detail_url": "berita-detail.html?id=2"
+  },
+  {
+    "id": 3,
+    "title": "Argenta Raih Penghargaan Perusahaan Terpercaya 2025",
+    "tanggal": "2025-03-01",
+    "lokasi": "Jakarta",
+    "cover": "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80",
+    "kategori": "Penghargaan",
+    "ringkasan": "Argenta kembali meraih penghargaan sebagai perusahaan terpercaya tingkat nasional.",
+    "isi": [
+      "Penghargaan ini diberikan oleh Asosiasi Industri Nasional atas kinerja dan integritas Argenta.",
+      "Direktur Utama Argenta menerima penghargaan secara langsung di Jakarta.",
+      "Penghargaan ini menjadi motivasi untuk terus meningkatkan layanan dan inovasi."
+    ],
+    "penulis": "Corporate Communication",
+    "detail_url": "berita-detail.html?id=3"
+  }
+]

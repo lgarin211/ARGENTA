@@ -28,98 +28,16 @@
       </nav>
     </header>
 
-    <section class="relative h-[60vh] flex items-center justify-center text-left px-8 mt-16 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=1350&q=80');">
+    <!-- Dynamic News Hero and List -->
+    <section id="news-hero" class="relative h-[60vh] flex items-center justify-center text-left px-8 mt-16 bg-cover bg-center">
       <div class="absolute inset-0 bg-red-900 bg-opacity-80"></div>
-      <div class="relative max-w-4xl text-white">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 max-w-lg leading-tight">Penguatan Kompetensi Engineering di Jabodetabek</h1>
-        <p class="text-lg md:text-xl font-normal max-w-md mb-6">Jakarta, 16 Mei 2025</p>
-        <button class="bg-red-900 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded transition">Lihat Detail</button>
+      <div class="relative max-w-4xl text-white" id="news-hero-content">
+        <!-- Hero content will be injected here -->
       </div>
     </section>
 
-    <section class="container mx-auto max-w-6xl px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <!-- News Card 1 -->
-      <div class="bg-red-800 rounded shadow overflow-hidden cursor-pointer group">
-        <img src="https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=600&q=80" alt="Sinergi Engineer Jabodetabek" class="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition duration-300" />
-        <div class="p-4">
-          <h3 class="font-semibold text-lg text-white">Sinergi Engineer Jabodetabek</h3>
-          <p class="text-sm text-gray-300">Jakarta, 1 Januari 2024</p>
-        </div>
-        <a href="detailberita.html" class="block mt-2 text-white font-semibold hover:text-red-500 transition flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M1.5 12s4-7.5 10.5-7.5S22.5 12 22.5 12s-4 7.5-10.5 7.5S1.5 12 1.5 12z" />
-            <circle cx="12" cy="12" r="3.5" fill="white" stroke="currentColor" stroke-width="2" />
-          </svg>
-        </a>
-      </div>
-      <!-- News Card 2 -->
-      <div class="bg-red-800 rounded shadow overflow-hidden cursor-pointer group">
-        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80" alt="Harmoni dalam Kebersamaan : Outing 2025" class="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition duration-300" />
-        <div class="p-4">
-          <h3 class="font-semibold text-lg text-white">Harmoni dalam Kebersamaan : Outing 2025</h3>
-          <p class="text-sm text-gray-300">Yogyakarta, 7 Mei 2025</p>
-        </div>
-        <a href="detailberita.html" class="block mt-2 text-white font-semibold hover:text-red-500 transition flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M1.5 12s4-7.5 10.5-7.5S22.5 12 22.5 12s-4 7.5-10.5 7.5S1.5 12 1.5 12z" />
-            <circle cx="12" cy="12" r="3.5" fill="white" stroke="currentColor" stroke-width="2" />
-          </svg>
-        </a>
-      </div>
-      <!-- News Card 3 -->
-      <div class="bg-red-800 rounded shadow overflow-hidden cursor-pointer group">
-        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Dari Kami Untuk Indonesia" class="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition duration-300" />
-        <div class="p-4">
-          <h3 class="font-semibold text-lg text-white">Dari Kami Untuk Indonesia</h3>
-          <p class="text-sm text-gray-300">Jakarta, 20 Mei 2025</p>
-        </div>
-        <a href="detailberita.html" class="block mt-2 text-white font-semibold hover:text-red-500 transition flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M1.5 12s4-7.5 10.5-7.5S22.5 12 22.5 12s-4 7.5-10.5 7.5S1.5 12 1.5 12z" />
-            <circle cx="12" cy="12" r="3.5" fill="white" stroke="currentColor" stroke-width="2" />
-          </svg>
-        </a>
-      </div>
-      <!-- Repeat cards as needed -->
-      <div class="bg-red-800 rounded shadow overflow-hidden cursor-pointer group">
-        <img src="https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=600&q=80" alt="Sinergi Engineer Jabodetabek" class="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition duration-300" />
-        <div class="p-4">
-          <h3 class="font-semibold text-lg text-white">Sinergi Engineer Jabodetabek</h3>
-          <p class="text-sm text-gray-300">Jakarta, 1 Januari 2024</p>
-        </div>
-        <a href="detailberita.html" class="block mt-2 text-white font-semibold hover:text-red-500 transition flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M1.5 12s4-7.5 10.5-7.5S22.5 12 22.5 12s-4 7.5-10.5 7.5S1.5 12 1.5 12z" />
-            <circle cx="12" cy="12" r="3.5" fill="white" stroke="currentColor" stroke-width="2" />
-          </svg>
-        </a>
-      </div>
-      <div class="bg-red-800 rounded shadow overflow-hidden cursor-pointer group">
-        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80" alt="Harmoni dalam Kebersamaan : Outing 2025" class="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition duration-300" />
-        <div class="p-4">
-          <h3 class="font-semibold text-lg text-white">Harmoni dalam Kebersamaan : Outing 2025</h3>
-          <p class="text-sm text-gray-300">Yogyakarta, 7 Mei 2025</p>
-        </div>
-        <a href="detailberita.html" class="block mt-2 text-white font-semibold hover:text-red-500 transition flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M1.5 12s4-7.5 10.5-7.5S22.5 12 22.5 12s-4 7.5-10.5 7.5S1.5 12 1.5 12z" />
-            <circle cx="12" cy="12" r="3.5" fill="white" stroke="currentColor" stroke-width="2" />
-          </svg>
-        </a>
-      </div>
-      <div class="bg-red-800 rounded shadow overflow-hidden cursor-pointer group">
-        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Dari Kami Untuk Indonesia" class="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition duration-300" />
-        <div class="p-4">
-          <h3 class="font-semibold text-lg text-white">Dari Kami Untuk Indonesia</h3>
-          <p class="text-sm text-gray-300">Jakarta, 20 Mei 2025</p>
-        </div>
-        <a href="detailberita.html" class="block mt-2 text-white font-semibold hover:text-red-500 transition flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M1.5 12s4-7.5 10.5-7.5S22.5 12 22.5 12s-4 7.5-10.5 7.5S1.5 12 1.5 12z" />
-            <circle cx="12" cy="12" r="3.5" fill="white" stroke="currentColor" stroke-width="2" />
-          </svg>
-        </a>
-      </div>
+    <section id="news-list" class="container mx-auto max-w-6xl px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <!-- News cards will be injected here -->
     </section>
 
     <footer class="bg-black text-gray-300 mt-12 py-4">
@@ -223,47 +141,44 @@
     </div>
   </div>
   <!-- jQuery (wajib sebelum script navbar) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script>
-    // Hamburger menu logic
-    const hamburger = document.getElementById('hamburger');
-    const navMenu = document.getElementById('navMenu');
-    function showMenu() {
-      navMenu.classList.remove('opacity-0', 'invisible', 'hidden');
-      navMenu.classList.add('opacity-100', 'visible');
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script>
+  // Helper for image base URL
+  function getImageUrl(path) {
+    if (!path) return 'https://via.placeholder.com/600x400?text=No+Image';
+    if (/^https?:\/\//.test(path)) return path;
+    return 'hook/' + path.replace(/^\/+/, '');
+  }
+
+  // Hamburger menu logic
+  const hamburger = document.getElementById('hamburger');
+  const navMenu = document.getElementById('navMenu');
+  function showMenu() {
+    navMenu.classList.remove('opacity-0', 'invisible', 'hidden');
+    navMenu.classList.add('opacity-100', 'visible');
+  }
+  function hideMenu() {
+    navMenu.classList.remove('opacity-100', 'visible');
+    navMenu.classList.add('opacity-0', 'invisible', 'hidden');
+  }
+  hamburger.addEventListener('click', () => {
+    const isOpen = navMenu.classList.contains('opacity-100');
+    if (isOpen) {
+      hideMenu();
+    } else {
+      showMenu();
     }
-    function hideMenu() {
-      navMenu.classList.remove('opacity-100', 'visible');
-      navMenu.classList.add('opacity-0', 'invisible', 'hidden');
-    }
-    hamburger.addEventListener('click', () => {
-      const isOpen = navMenu.classList.contains('opacity-100');
-      if (isOpen) {
+  });
+  // Close menu on link click (mobile)
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 768) {
         hideMenu();
-      } else {
-        showMenu();
       }
     });
-    // Close menu on link click (mobile)
-    navMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        if (window.innerWidth < 768) {
-          hideMenu();
-        }
-      });
-    });
-    // Responsive fix on resize
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768) {
-        navMenu.classList.remove('opacity-0', 'invisible', 'hidden', 'flex-col', 'items-center', 'justify-center', 'space-y-8');
-        navMenu.classList.add('opacity-100', 'visible', 'flex', 'flex-row', 'space-x-8');
-      } else {
-        hideMenu();
-        navMenu.classList.remove('flex-row', 'space-x-8');
-        navMenu.classList.add('flex-col', 'items-center', 'justify-center', 'space-y-8');
-      }
-    });
-    // Initial state
+  });
+  // Responsive fix on resize
+  window.addEventListener('resize', () => {
     if (window.innerWidth >= 768) {
       navMenu.classList.remove('opacity-0', 'invisible', 'hidden', 'flex-col', 'items-center', 'justify-center', 'space-y-8');
       navMenu.classList.add('opacity-100', 'visible', 'flex', 'flex-row', 'space-x-8');
@@ -272,29 +187,98 @@
       navMenu.classList.remove('flex-row', 'space-x-8');
       navMenu.classList.add('flex-col', 'items-center', 'justify-center', 'space-y-8');
     }
-    function showLoading() {
-      document.getElementById('page-loading').style.opacity = '1';
-      document.getElementById('page-loading').style.pointerEvents = 'auto';
-    }
-    function hideLoading() {
-      document.getElementById('page-loading').style.opacity = '0';
-      document.getElementById('page-loading').style.pointerEvents = 'none';
-      setTimeout(() => {
-        document.getElementById('page-loading').style.display = 'none';
-      }, 400);
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('#navMenu a').forEach(link => {
-        link.addEventListener('click', function(e) {
-          const href = link.getAttribute('href');
-          if (href && href !== '#' && !href.startsWith('javascript:')) {
-            showLoading();
-          }
-        });
+  });
+  // Initial state
+  if (window.innerWidth >= 768) {
+    navMenu.classList.remove('opacity-0', 'invisible', 'hidden', 'flex-col', 'items-center', 'justify-center', 'space-y-8');
+    navMenu.classList.add('opacity-100', 'visible', 'flex', 'flex-row', 'space-x-8');
+  } else {
+    hideMenu();
+    navMenu.classList.remove('flex-row', 'space-x-8');
+    navMenu.classList.add('flex-col', 'items-center', 'justify-center', 'space-y-8');
+  }
+  function showLoading() {
+    document.getElementById('page-loading').style.opacity = '1';
+    document.getElementById('page-loading').style.pointerEvents = 'auto';
+  }
+  function hideLoading() {
+    document.getElementById('page-loading').style.opacity = '0';
+    document.getElementById('page-loading').style.pointerEvents = 'none';
+    setTimeout(() => {
+      document.getElementById('page-loading').style.display = 'none';
+    }, 400);
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('#navMenu a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = link.getAttribute('href');
+        if (href && href !== '#' && !href.startsWith('javascript:')) {
+          showLoading();
+        }
       });
-      window.addEventListener('load', hideLoading);
-      setTimeout(hideLoading, 2000);
     });
-    </script>
+    window.addEventListener('load', hideLoading);
+    setTimeout(hideLoading, 2000);
+
+    // --- Dynamic News Loading ---
+    function renderNewsHero(news) {
+      const hero = document.getElementById('news-hero');
+      const heroContent = document.getElementById('news-hero-content');
+      if (!news || !news.length) {
+        hero.style.backgroundImage = "url('https://via.placeholder.com/1350x600?text=No+News')";
+        heroContent.innerHTML = '<h1 class="text-4xl md:text-5xl font-extrabold mb-4 max-w-lg leading-tight">Tidak ada berita tersedia</h1>';
+        return;
+      }
+      const first = news[0];
+      hero.style.backgroundImage = `url('${getImageUrl(first.image)}')`;
+      heroContent.innerHTML = `
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 max-w-lg leading-tight">${first.title || '-'}</h1>
+        <p class="text-lg md:text-xl font-normal max-w-md mb-6">${first.location ? first.location + ', ' : ''}${first.date || '-'}</p>
+        <a href="detailberita.html?id=${encodeURIComponent(first.id)}" class="bg-red-900 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded transition inline-block">Lihat Detail</a>
+      `;
+    }
+
+    function renderNewsList(news) {
+      const list = document.getElementById('news-list');
+      if (!news || !news.length) {
+        list.innerHTML = '<div class="col-span-3 text-center text-gray-300 py-12">Tidak ada berita ditemukan.</div>';
+        return;
+      }
+      list.innerHTML = news.map(item => `
+        <div class="bg-red-800 rounded shadow overflow-hidden cursor-pointer group">
+          <img src="${getImageUrl(item.image)}" alt="${item.title || ''}" class="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition duration-300" />
+          <div class="p-4">
+            <h3 class="font-semibold text-lg text-white">${item.title || '-'}</h3>
+            <p class="text-sm text-gray-300">${item.location ? item.location + ', ' : ''}${item.date || '-'}</p>
+          </div>
+          <a href="detailberita.html?id=${encodeURIComponent(item.id)}" class="block mt-2 text-white font-semibold hover:text-red-500 transition flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M1.5 12s4-7.5 10.5-7.5S22.5 12 22.5 12s-4 7.5-10.5 7.5S1.5 12 1.5 12z" />
+              <circle cx="12" cy="12" r="3.5" fill="white" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </a>
+        </div>
+      `).join('');
+    }
+
+    function fetchNews() {
+      fetch('hook/berita.json')
+        .then(res => {
+          if (!res.ok) throw new Error('Gagal memuat data berita');
+          return res.json();
+        })
+        .then(data => {
+          if (!Array.isArray(data)) throw new Error('Format data tidak valid');
+          renderNewsHero(data);
+          renderNewsList(data);
+        })
+        .catch(err => {
+          renderNewsHero([]);
+          renderNewsList([]);
+        });
+    }
+    fetchNews();
+  });
+  </script>
   </body>
 </html>
