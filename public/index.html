@@ -542,14 +542,12 @@
                 console.error('Error checking Firebase cache:', error);
                 return { hasCache: false, error: error.message };
             }
-        }
-
-        // Fungsi untuk force refresh data (bypass cache)
+        }        // Fungsi untuk force refresh data (bypass cache)
         async function forceRefreshData() {
             console.log('Force refresh: menghapus cache dan mengambil data fresh dari API');
             await clearCacheFromFirebase();
             await loadKontenJSON();
-
+            
             // Re-render semua komponen
             renderHero();
             renderVisiMisi();
@@ -558,13 +556,13 @@
             renderLayanan();
             renderPerusahaanDipercaya();
             renderTentangKami();
-
+            
             // Reinitialize carousels
             setTimeout(function () {
                 $('.layanan-carousel').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
                 $('.hero-carousel').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
                 $('.owl-carousel.owl-theme').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
-
+                
                 $('.layanan-carousel').addClass('owl-carousel').owlCarousel({
                     loop: true,
                     margin: 24,
@@ -599,8 +597,52 @@
                     }
                 });
             }, 500);
-
+            
             console.log('Force refresh selesai');
+        }
+
+        // Fungsi untuk mengelola image cache (Service Worker)
+        async function clearImageCache() {
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                return new Promise((resolve, reject) => {
+                    const messageChannel = new MessageChannel();
+                    messageChannel.port1.onmessage = (event) => {
+                        if (event.data.success) {
+                            console.log('Image cache berhasil dihapus');
+                            resolve();
+                        } else {
+                            reject(new Error('Gagal menghapus image cache'));
+                        }
+                    };
+                    
+                    navigator.serviceWorker.controller.postMessage(
+                        { type: 'CLEAR_IMAGE_CACHE' },
+                        [messageChannel.port2]
+                    );
+                });
+            } else {
+                console.log('Service Worker tidak tersedia');
+            }
+        }
+
+        async function getImageCacheInfo() {
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                return new Promise((resolve, reject) => {
+                    const messageChannel = new MessageChannel();
+                    messageChannel.port1.onmessage = (event) => {
+                        console.log('Image cache info:', event.data);
+                        resolve(event.data);
+                    };
+                    
+                    navigator.serviceWorker.controller.postMessage(
+                        { type: 'GET_CACHE_INFO' },
+                        [messageChannel.port2]
+                    );
+                });
+            } else {
+                console.log('Service Worker tidak tersedia');
+                return { itemCount: 0, urls: [] };
+            }
         }
 
         // Hamburger menu logic
@@ -933,6 +975,17 @@
                 setTimeout(waitForFirebase, 500);
             } catch (e) {
                 console.error('Error loading the Firebase SDK:', e);
+            }
+
+            // Register Service Worker for image caching
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
             }
         });
     </script>
