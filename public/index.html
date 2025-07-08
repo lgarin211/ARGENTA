@@ -276,7 +276,106 @@
             }
         };
 
-        // Fungsi helper untuk mengelola cookies
+        // Fungsi helper untuk mengelola cache di Firebase Firestore
+        const CACHE_COLLECTION = 'argentaCache';
+        const CACHE_DOCUMENT_ID = 'mainContent';
+
+        async function setCacheToFirebase(data) {
+            try {
+                if (typeof firebase === 'undefined' || !firebase.firestore) {
+                    console.log('Firebase Firestore tidak tersedia, menggunakan cache cookies');
+                    setCookie('argentaData', data, 1);
+                    setCookie('argentaDataTimestamp', Date.now(), 1);
+                    return;
+                }
+
+                const db = firebase.firestore();
+                const cacheRef = db.collection(CACHE_COLLECTION).doc(CACHE_DOCUMENT_ID);
+                
+                await cacheRef.set({
+                    data: data,
+                    timestamp: Date.now(),
+                    expiry: Date.now() + (60 * 60 * 1000), // 1 jam dari sekarang
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                console.log('Data berhasil disimpan ke Firebase cache');
+            } catch (error) {
+                console.error('Error menyimpan ke Firebase cache:', error);
+                // Fallback ke cookies jika Firebase gagal
+                setCookie('argentaData', data, 1);
+                setCookie('argentaDataTimestamp', Date.now(), 1);
+            }
+        }
+
+        async function getCacheFromFirebase() {
+            try {
+                if (typeof firebase === 'undefined' || !firebase.firestore) {
+                    console.log('Firebase Firestore tidak tersedia, menggunakan cache cookies');
+                    return {
+                        data: getCookie('argentaData'),
+                        timestamp: getCookie('argentaDataTimestamp'),
+                        isValid: false
+                    };
+                }
+
+                const db = firebase.firestore();
+                const cacheRef = db.collection(CACHE_COLLECTION).doc(CACHE_DOCUMENT_ID);
+                const doc = await cacheRef.get();
+                
+                if (doc.exists) {
+                    const cacheData = doc.data();
+                    const now = Date.now();
+                    const isValid = now < cacheData.expiry;
+                    
+                    console.log(`Firebase cache ditemukan, valid: ${isValid}`);
+                    return {
+                        data: cacheData.data,
+                        timestamp: cacheData.timestamp,
+                        isValid: isValid
+                    };
+                } else {
+                    console.log('Tidak ada cache di Firebase');
+                    return { data: null, timestamp: null, isValid: false };
+                }
+            } catch (error) {
+                console.error('Error mengambil dari Firebase cache:', error);
+                // Fallback ke cookies jika Firebase gagal
+                const cachedData = getCookie('argentaData');
+                const cacheTimestamp = getCookie('argentaDataTimestamp');
+                const isValid = cachedData && cacheTimestamp && (Date.now() - cacheTimestamp < 3600000);
+                
+                return {
+                    data: cachedData,
+                    timestamp: cacheTimestamp,
+                    isValid: isValid
+                };
+            }
+        }
+
+        async function clearCacheFromFirebase() {
+            try {
+                if (typeof firebase === 'undefined' || !firebase.firestore) {
+                    console.log('Firebase Firestore tidak tersedia, menghapus cache cookies');
+                    deleteCookie('argentaData');
+                    deleteCookie('argentaDataTimestamp');
+                    return;
+                }
+
+                const db = firebase.firestore();
+                const cacheRef = db.collection(CACHE_COLLECTION).doc(CACHE_DOCUMENT_ID);
+                await cacheRef.delete();
+                
+                console.log('Firebase cache berhasil dihapus');
+            } catch (error) {
+                console.error('Error menghapus Firebase cache:', error);
+                // Fallback hapus cookies
+                deleteCookie('argentaData');
+                deleteCookie('argentaDataTimestamp');
+            }
+        }
+
+        // Fungsi helper untuk mengelola cookies (sebagai fallback)
         function setCookie(name, value, hours) {
             const date = new Date();
             date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
@@ -305,18 +404,18 @@
             document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         }
 
-        // Fungsi untuk load data dari API eksternal dengan caching
+        // Fungsi untuk load data dari API eksternal dengan Firebase caching
         async function loadKontenJSON() {
             try {
-                // Cek apakah data sudah ada di cookies
-                const cachedData = getCookie('argentaData');
-                const cacheTimestamp = getCookie('argentaDataTimestamp');
-
-                // Jika data ada di cache dan belum expired (1 jam = 3600000 ms)
-                if (cachedData && cacheTimestamp && (Date.now() - cacheTimestamp < 3600000)) {
-                    console.log('Menggunakan data dari cache cookies');
-
+                // Cek apakah data sudah ada di Firebase cache
+                const cacheResult = await getCacheFromFirebase();
+                
+                // Jika data ada di cache dan masih valid
+                if (cacheResult.data && cacheResult.isValid) {
+                    console.log('Menggunakan data dari Firebase cache');
+                    
                     // Assign data dari cache
+                    const cachedData = cacheResult.data;
                     kontenHero = cachedData.kontenHero || defaultHeroData;
                     kontenLayanan = cachedData.kontenLayanan || defaultData.kontenLayanan;
 
@@ -343,7 +442,7 @@
                     }
 
                     kontenTentangKami = cachedData.kontenTentangKami || defaultData.kontenTentangKami;
-
+                    
                     return; // Keluar dari fungsi karena menggunakan cache
                 }
 
@@ -391,18 +490,16 @@
 
                 kontenTentangKami = data.kontenTentangKami || defaultData.kontenTentangKami;
 
-                // Simpan data ke cookies dengan timestamp
-                setCookie('argentaData', data, 1); // Simpan selama 1 jam
-                setCookie('argentaDataTimestamp', Date.now(), 1); // Simpan timestamp
+                // Simpan data ke Firebase cache
+                await setCacheToFirebase(data);
 
-                console.log('Data berhasil dimuat dari API dan disimpan ke cache:', data);
+                console.log('Data berhasil dimuat dari API dan disimpan ke Firebase cache:', data);
 
             } catch (e) {
                 console.error('Error loading API data:', e);
 
                 // Hapus cache jika ada error
-                deleteCookie('argentaData');
-                deleteCookie('argentaDataTimestamp');
+                await clearCacheFromFirebase();
 
                 // Fallback ke data default jika API gagal
                 kontenLayanan = defaultData.kontenLayanan;
@@ -417,30 +514,93 @@
         }
 
         // Fungsi untuk menghapus cache manual (bisa dipanggil dari console untuk testing)
-        function clearCache() {
-            deleteCookie('argentaData');
-            deleteCookie('argentaDataTimestamp');
-            console.log('Cache data Argenta berhasil dihapus');
+        async function clearCache() {
+            await clearCacheFromFirebase();
+            console.log('Cache data Argenta berhasil dihapus dari Firebase');
         }
 
         // Fungsi untuk cek status cache (bisa dipanggil dari console untuk testing)
-        function checkCache() {
-            const cachedData = getCookie('argentaData');
-            const cacheTimestamp = getCookie('argentaDataTimestamp');
-
-            if (cachedData && cacheTimestamp) {
-                const timeLeft = 3600000 - (Date.now() - cacheTimestamp);
-                const minutesLeft = Math.floor(timeLeft / 60000);
-                console.log(`Cache tersedia, sisa waktu: ${minutesLeft} menit`);
-                return {
-                    hasCache: true,
-                    minutesLeft: minutesLeft,
-                    data: cachedData
-                };
-            } else {
-                console.log('Tidak ada cache tersedia');
-                return { hasCache: false };
+        async function checkCache() {
+            try {
+                const cacheResult = await getCacheFromFirebase();
+                
+                if (cacheResult.data && cacheResult.isValid) {
+                    const timeLeft = cacheResult.data.expiry ? cacheResult.data.expiry - Date.now() : 0;
+                    const minutesLeft = Math.floor(timeLeft / 60000);
+                    console.log(`Firebase cache tersedia, sisa waktu: ${minutesLeft} menit`);
+                    return { 
+                        hasCache: true, 
+                        minutesLeft: minutesLeft,
+                        data: cacheResult.data,
+                        source: 'firebase'
+                    };
+                } else {
+                    console.log('Tidak ada cache tersedia di Firebase');
+                    return { hasCache: false, source: 'firebase' };
+                }
+            } catch (error) {
+                console.error('Error checking Firebase cache:', error);
+                return { hasCache: false, error: error.message };
             }
+        }
+
+        // Fungsi untuk force refresh data (bypass cache)
+        async function forceRefreshData() {
+            console.log('Force refresh: menghapus cache dan mengambil data fresh dari API');
+            await clearCacheFromFirebase();
+            await loadKontenJSON();
+            
+            // Re-render semua komponen
+            renderHero();
+            renderVisiMisi();
+            renderKomisarisDirektur();
+            renderKoneksiWilayah();
+            renderLayanan();
+            renderPerusahaanDipercaya();
+            renderTentangKami();
+            
+            // Reinitialize carousels
+            setTimeout(function () {
+                $('.layanan-carousel').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
+                $('.hero-carousel').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
+                $('.owl-carousel.owl-theme').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
+                
+                $('.layanan-carousel').addClass('owl-carousel').owlCarousel({
+                    loop: true,
+                    margin: 24,
+                    nav: false,
+                    dots: true,
+                    responsive: {
+                        0: { items: 1 },
+                        600: { items: 2 },
+                        1000: { items: 3 }
+                    }
+                });
+                $('.hero-carousel').addClass('owl-carousel').owlCarousel({
+                    items: 1,
+                    loop: true,
+                    nav: false,
+                    dots: true,
+                    autoplay: true,
+                    autoplayTimeout: 5000,
+                    animateOut: 'fadeOut',
+                    animateIn: 'fadeIn',
+                    smartSpeed: 800
+                });
+                $('.owl-carousel.owl-theme').addClass('owl-carousel').owlCarousel({
+                    loop: true,
+                    margin: 24,
+                    nav: false,
+                    dots: true,
+                    responsive: {
+                        0: { items: 1 },
+                        600: { items: 2 },
+                        1000: { items: 3 }
+                    }
+                });
+            }, 500);
+            
+            console.log('Force refresh selesai');
         }
 
         // Hamburger menu logic
