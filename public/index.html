@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Argenta Intramas</title>
+    <title>Argenta Intramas </title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
@@ -547,7 +547,7 @@
             console.log('Force refresh: menghapus cache dan mengambil data fresh dari API');
             await clearCacheFromFirebase();
             await loadKontenJSON();
-            
+
             // Re-render semua komponen
             renderHero();
             renderVisiMisi();
@@ -556,13 +556,13 @@
             renderLayanan();
             renderPerusahaanDipercaya();
             renderTentangKami();
-            
+
             // Reinitialize carousels
             setTimeout(function () {
                 $('.layanan-carousel').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
                 $('.hero-carousel').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
                 $('.owl-carousel.owl-theme').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
-                
+
                 $('.layanan-carousel').addClass('owl-carousel').owlCarousel({
                     loop: true,
                     margin: 24,
@@ -597,7 +597,7 @@
                     }
                 });
             }, 500);
-            
+
             console.log('Force refresh selesai');
         }
 
@@ -614,7 +614,7 @@
                             reject(new Error('Gagal menghapus image cache'));
                         }
                     };
-                    
+
                     navigator.serviceWorker.controller.postMessage(
                         { type: 'CLEAR_IMAGE_CACHE' },
                         [messageChannel.port2]
@@ -633,7 +633,7 @@
                         console.log('Image cache info:', event.data);
                         resolve(event.data);
                     };
-                    
+
                     navigator.serviceWorker.controller.postMessage(
                         { type: 'GET_CACHE_INFO' },
                         [messageChannel.port2]
