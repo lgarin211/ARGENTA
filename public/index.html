@@ -276,9 +276,79 @@
             }
         };
 
-        // Fungsi untuk load data dari API eksternal
+        // Fungsi helper untuk mengelola cookies
+        function setCookie(name, value, hours) {
+            const date = new Date();
+            date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + JSON.stringify(value) + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) {
+                    try {
+                        return JSON.parse(c.substring(nameEQ.length, c.length));
+                    } catch (e) {
+                        return null;
+                    }
+                }
+            }
+            return null;
+        }
+
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
+        // Fungsi untuk load data dari API eksternal dengan caching
         async function loadKontenJSON() {
             try {
+                // Cek apakah data sudah ada di cookies
+                const cachedData = getCookie('argentaData');
+                const cacheTimestamp = getCookie('argentaDataTimestamp');
+                
+                // Jika data ada di cache dan belum expired (1 jam = 3600000 ms)
+                if (cachedData && cacheTimestamp && (Date.now() - cacheTimestamp < 3600000)) {
+                    console.log('Menggunakan data dari cache cookies');
+                    
+                    // Assign data dari cache
+                    kontenHero = cachedData.kontenHero || defaultHeroData;
+                    kontenLayanan = cachedData.kontenLayanan || defaultData.kontenLayanan;
+
+                    if (cachedData.kontenKomisarisDirektur &&
+                        (cachedData.kontenKomisarisDirektur.komisaris || cachedData.kontenKomisarisDirektur.direktur)) {
+                        kontenKomisarisDirektur = {
+                            komisaris: cachedData.kontenKomisarisDirektur.komisaris || null,
+                            direktur: cachedData.kontenKomisarisDirektur.direktur || null
+                        };
+                    } else {
+                        kontenKomisarisDirektur = defaultData.kontenKomisarisDirektur;
+                    }
+
+                    kontenVisiMisi = cachedData.kontenVisiMisi || defaultData.kontenVisiMisi;
+                    kontenKoneksiWilayah = cachedData.kontenKoneksiWilayah || defaultData.kontenKoneksiWilayah;
+
+                    if (cachedData.kontenPerusahaanDipercaya) {
+                        kontenPerusahaanDipercaya = {
+                            judul: cachedData.kontenPerusahaanDipercaya.judul || defaultData.kontenPerusahaanDipercaya.judul,
+                            logo: cachedData.kontenPerusahaanDipercaya.logo || null
+                        };
+                    } else {
+                        kontenPerusahaanDipercaya = defaultData.kontenPerusahaanDipercaya;
+                    }
+
+                    kontenTentangKami = cachedData.kontenTentangKami || defaultData.kontenTentangKami;
+                    
+                    return; // Keluar dari fungsi karena menggunakan cache
+                }
+
+                // Jika tidak ada cache atau sudah expired, hit ke server
+                console.log('Mengambil data dari server API');
                 const res = await fetch('https://allhub.progesio.my.id/api/hub/argenta/index');
                 if (!res.ok) throw new Error('Gagal memuat data dari API');
 
@@ -321,10 +391,18 @@
 
                 kontenTentangKami = data.kontenTentangKami || defaultData.kontenTentangKami;
 
-                console.log('Data berhasil dimuat dari API:', data);
+                // Simpan data ke cookies dengan timestamp
+                setCookie('argentaData', data, 1); // Simpan selama 1 jam
+                setCookie('argentaDataTimestamp', Date.now(), 1); // Simpan timestamp
+
+                console.log('Data berhasil dimuat dari API dan disimpan ke cache:', data);
 
             } catch (e) {
                 console.error('Error loading API data:', e);
+
+                // Hapus cache jika ada error
+                deleteCookie('argentaData');
+                deleteCookie('argentaDataTimestamp');
 
                 // Fallback ke data default jika API gagal
                 kontenLayanan = defaultData.kontenLayanan;
@@ -335,6 +413,33 @@
                 kontenTentangKami = defaultData.kontenTentangKami;
 
                 alert('Gagal memuat konten dari server, menggunakan konten default!');
+            }
+        }
+
+        // Fungsi untuk menghapus cache manual (bisa dipanggil dari console untuk testing)
+        function clearCache() {
+            deleteCookie('argentaData');
+            deleteCookie('argentaDataTimestamp');
+            console.log('Cache data Argenta berhasil dihapus');
+        }
+
+        // Fungsi untuk cek status cache (bisa dipanggil dari console untuk testing)
+        function checkCache() {
+            const cachedData = getCookie('argentaData');
+            const cacheTimestamp = getCookie('argentaDataTimestamp');
+            
+            if (cachedData && cacheTimestamp) {
+                const timeLeft = 3600000 - (Date.now() - cacheTimestamp);
+                const minutesLeft = Math.floor(timeLeft / 60000);
+                console.log(`Cache tersedia, sisa waktu: ${minutesLeft} menit`);
+                return { 
+                    hasCache: true, 
+                    minutesLeft: minutesLeft,
+                    data: cachedData 
+                };
+            } else {
+                console.log('Tidak ada cache tersedia');
+                return { hasCache: false };
             }
         }
 
