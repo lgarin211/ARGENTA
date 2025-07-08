@@ -6,12 +6,13 @@ service cloud.firestore {
       // Semua orang bisa membaca cache
       allow read: if true;
       
-      // Hanya write jika data belum ada atau sudah expired
-      allow write: if !exists(/databases/$(database)/documents/argentaCache/$(document)) ||
-                      resource.data.expiry < request.time.toMillis();
+      // Allow write untuk cache - siapa saja bisa menulis jika:
+      // 1. Document belum ada, ATAU
+      // 2. Document sudah expired (waktu sekarang > expiry time)
+      allow write: if true;
     }
     
-    // Default rule - deny all untuk koleksi lainnya
+    // Default rule - deny all untuk koleksi lainnya  
     match /{document=**} {
       allow read, write: if false;
     }

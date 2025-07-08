@@ -291,14 +291,14 @@
 
                 const db = firebase.firestore();
                 const cacheRef = db.collection(CACHE_COLLECTION).doc(CACHE_DOCUMENT_ID);
-                
+
                 await cacheRef.set({
                     data: data,
                     timestamp: Date.now(),
                     expiry: Date.now() + (60 * 60 * 1000), // 1 jam dari sekarang
                     lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                
+
                 console.log('Data berhasil disimpan ke Firebase cache');
             } catch (error) {
                 console.error('Error menyimpan ke Firebase cache:', error);
@@ -322,12 +322,12 @@
                 const db = firebase.firestore();
                 const cacheRef = db.collection(CACHE_COLLECTION).doc(CACHE_DOCUMENT_ID);
                 const doc = await cacheRef.get();
-                
+
                 if (doc.exists) {
                     const cacheData = doc.data();
                     const now = Date.now();
                     const isValid = now < cacheData.expiry;
-                    
+
                     console.log(`Firebase cache ditemukan, valid: ${isValid}`);
                     return {
                         data: cacheData.data,
@@ -344,7 +344,7 @@
                 const cachedData = getCookie('argentaData');
                 const cacheTimestamp = getCookie('argentaDataTimestamp');
                 const isValid = cachedData && cacheTimestamp && (Date.now() - cacheTimestamp < 3600000);
-                
+
                 return {
                     data: cachedData,
                     timestamp: cacheTimestamp,
@@ -365,7 +365,7 @@
                 const db = firebase.firestore();
                 const cacheRef = db.collection(CACHE_COLLECTION).doc(CACHE_DOCUMENT_ID);
                 await cacheRef.delete();
-                
+
                 console.log('Firebase cache berhasil dihapus');
             } catch (error) {
                 console.error('Error menghapus Firebase cache:', error);
@@ -409,11 +409,11 @@
             try {
                 // Cek apakah data sudah ada di Firebase cache
                 const cacheResult = await getCacheFromFirebase();
-                
+
                 // Jika data ada di cache dan masih valid
                 if (cacheResult.data && cacheResult.isValid) {
                     console.log('Menggunakan data dari Firebase cache');
-                    
+
                     // Assign data dari cache
                     const cachedData = cacheResult.data;
                     kontenHero = cachedData.kontenHero || defaultHeroData;
@@ -442,7 +442,7 @@
                     }
 
                     kontenTentangKami = cachedData.kontenTentangKami || defaultData.kontenTentangKami;
-                    
+
                     return; // Keluar dari fungsi karena menggunakan cache
                 }
 
@@ -523,13 +523,13 @@
         async function checkCache() {
             try {
                 const cacheResult = await getCacheFromFirebase();
-                
+
                 if (cacheResult.data && cacheResult.isValid) {
                     const timeLeft = cacheResult.data.expiry ? cacheResult.data.expiry - Date.now() : 0;
                     const minutesLeft = Math.floor(timeLeft / 60000);
                     console.log(`Firebase cache tersedia, sisa waktu: ${minutesLeft} menit`);
-                    return { 
-                        hasCache: true, 
+                    return {
+                        hasCache: true,
                         minutesLeft: minutesLeft,
                         data: cacheResult.data,
                         source: 'firebase'
@@ -549,7 +549,7 @@
             console.log('Force refresh: menghapus cache dan mengambil data fresh dari API');
             await clearCacheFromFirebase();
             await loadKontenJSON();
-            
+
             // Re-render semua komponen
             renderHero();
             renderVisiMisi();
@@ -558,13 +558,13 @@
             renderLayanan();
             renderPerusahaanDipercaya();
             renderTentangKami();
-            
+
             // Reinitialize carousels
             setTimeout(function () {
                 $('.layanan-carousel').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
                 $('.hero-carousel').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
                 $('.owl-carousel.owl-theme').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
-                
+
                 $('.layanan-carousel').addClass('owl-carousel').owlCarousel({
                     loop: true,
                     margin: 24,
@@ -599,7 +599,7 @@
                     }
                 });
             }, 500);
-            
+
             console.log('Force refresh selesai');
         }
 
