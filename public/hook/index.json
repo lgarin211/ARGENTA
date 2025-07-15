@@ -1,0 +1,101 @@
+{
+  "kontenLayanan": {
+    "ATM SECURITY CAMERA": {
+      "title": "ATM SECURITY CAMERA",
+      "desc": "Pemasangan, pemeliharaan, dan monitoring kamera keamanan ATM secara real-time dengan teknologi canggih.",
+      "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80"
+    },
+    "ATM SPAREPARTS": {
+      "title": "ATM SPAREPARTS",
+      "desc": "Penyediaan suku cadang ATM berkualitas tinggi dengan garansi resmi dan dukungan teknis 24/7.",
+      "image": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=400&q=80"
+    },
+    "SOFTWARE DISTRIBUTION": {
+      "title": "SOFTWARE DISTRIBUTION",
+      "desc": "Distribusi perangkat lunak sistem ATM dan solusi banking digital yang handal dan aman.",
+      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80"
+    },
+    "CASH RECYCLING MACHINE (CRM)": {
+      "title": "CASH RECYCLING MACHINE (CRM)",
+      "desc": "Layanan CRM untuk efisiensi pengelolaan uang tunai dalam operasional ATM modern.",
+      "image": "https://static.vecteezy.com/system/resources/previews/048/860/255/non_2x/indonesian-map-on-red-flat-design-illustration-vector.jpg"
+    },
+    "MANAGED SERVICES": {
+      "title": "MANAGED SERVICES",
+      "desc": "Solusi outsourcing operasional ATM untuk efisiensi biaya dan peningkatan uptime.",
+      "image": "https://images.unsplash.com/photo-1581091215367-7b37e745d434?auto=format&fit=crop&w=800&q=80"
+    },
+    "ATM INSTALLATION & RELOCATION": {
+      "title": "ATM INSTALLATION & RELOCATION",
+      "desc": "Layanan instalasi dan pemindahan ATM dengan tim profesional dan armada khusus.",
+      "image": "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80"
+    }
+  },
+  "kontenKomisarisDirektur": {
+    "komisaris": {
+      "nama": "Dian Prasetyo",
+      "jabatan": "Komisaris",
+      "image": "https://randomuser.me/api/portraits/men/32.jpg",
+      "desc": "Memiliki pengalaman 15 tahun di bidang pengembangan teknologi dan pengawasan korporasi digital."
+    },
+    "direktur": {
+      "nama": "Ratna Ayu Putri",
+      "jabatan": "Direktur Utama",
+      "image": "https://randomuser.me/api/portraits/women/44.jpg",
+      "desc": "Memimpin perusahaan dengan visi inovasi dan pengalaman lebih dari 12 tahun di industri teknologi keuangan."
+    }
+  },
+  "kontenVisiMisi": {
+    "visi": "Menjadi pemimpin dalam penyediaan solusi layanan mandiri perbankan yang inovatif dan terintegrasi di Asia Tenggara.",
+    "misi": [
+      "Menyediakan layanan dan teknologi ATM berkualitas tinggi dengan cakupan nasional.",
+      "Menjadi mitra utama perbankan dalam digitalisasi layanan berbasis teknologi.",
+      "Meningkatkan kepuasan pelanggan melalui inovasi berkelanjutan dan keunggulan operasional.",
+      "Menumbuhkan budaya perusahaan yang berorientasi pada solusi, etika, dan profesionalisme."
+    ]
+  },
+  "kontenKoneksiWilayah": {
+    "judul": "KONEKSI WILAYAH",
+    "deskripsi": "Hadir di lebih dari 250 kota dan kabupaten di seluruh Indonesia dengan jaringan teknisi lokal yang sigap dan andal.",
+    "image": "https://static.vecteezy.com/system/resources/previews/048/860/255/non_2x/indonesian-map-on-red-flat-design-illustration-vector.jpg"
+  },
+  "kontenPerusahaanDipercaya": {
+    "judul": "Telah Dipercaya Oleh Perusahaan Lain",
+    "logo": [
+      { "nama": "BCA", "image": "https://shl.co.id/wp-content/uploads/2022/11/lg-BCA-1.png" },
+      { "nama": "Mandiri", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/2560px-Bank_Mandiri_logo_2016.svg.png" },
+      { "nama": "BNI", "image": "https://cdn.prod.website-files.com/64199d190fc7afa82666d89c/6491bee525769f3d615b7ac3_bni_bank.webp" },
+      { "nama": "BRI", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/BRI_2020_%28Alternative%29.svg/2560px-BRI_2020_%28Alternative%29.svg.png" }
+    ]
+  },
+  "kontenTentangKami": {
+    "judul": "TENTANG KAMI",
+    "image": "https://2456764.fs1.hubspotusercontent-eu1.net/hub/2456764/hubfs/YoungPeopleBusinessMeeting_1200x627.jpg",
+    "paragraf": [
+      "Argenta adalah mitra teknologi terpercaya yang berfokus pada sektor keuangan, dengan spesialisasi pada layanan dan perangkat ATM.",
+      "Dengan pengalaman lebih dari 10 tahun, kami menyediakan solusi terintegrasi dari perangkat keras, lunak, hingga dukungan teknis berstandar tinggi.",
+      "Kami percaya bahwa digitalisasi perbankan harus didukung oleh infrastruktur yang solid dan layanan yang cepat tanggap.",
+      "Argenta juga aktif menjalin kerja sama dengan institusi pendidikan dan komunitas IT untuk memperluas ekosistem inovasi nasional."
+    ]
+  },
+  "kontenHero": [
+    {
+      "background": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80",
+      "overlay": 0.45,
+      "title": "Senantiasa Membantu",
+      "subtitle": "Argenta Teknika Intramas siap membantu anda dalam penyediaan kebutuhan bisnis."
+    },
+    {
+      "background": "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1350&q=80",
+      "overlay": 0.45,
+      "title": "Solusi Teknologi Perbankan",
+      "subtitle": "Mitra transformasi digital dan layanan ATM di seluruh Indonesia."
+    },
+    {
+      "background": "https://images.unsplash.com/photo-1581090700227-41f1d94b5e91?auto=format&fit=crop&w=1350&q=80",
+      "overlay": 0.5,
+      "title": "Jangkauan Nasional",
+      "subtitle": "Tim teknisi kami tersebar di lebih dari 250 wilayah."
+    }
+  ]
+}

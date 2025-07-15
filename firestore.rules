@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Rules untuk koleksi argentaCache
+    match /argentaCache/{document} {
+      // Semua orang bisa membaca cache
+      allow read: if true;
+      
+      // Allow write untuk cache - siapa saja bisa menulis jika:
+      // 1. Document belum ada, ATAU
+      // 2. Document sudah expired (waktu sekarang > expiry time)
+      allow write: if true;
+    }
+    
+    // Default rule - deny all untuk koleksi lainnya  
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
