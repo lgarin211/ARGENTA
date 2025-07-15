@@ -4,35 +4,241 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Argenta Intramas </title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
-    <!-- Owl Carousel CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Argenta Intramas</title>
+    <meta name="description"
+        content="Argenta Teknika Intramas - Senantiasa membantu dalam penyediaan kebutuhan bisnis Anda dengan layanan terpercaya dan berkualitas tinggi.">
+    <meta name="keywords" content="argenta, teknika, intramas, bisnis, layanan, perusahaan">
+    <meta name="author" content="Argenta Teknika Intramas">
 
-    <!-- Firebase SDK Scripts -->
-    <script defer src="/__/firebase/11.10.0/firebase-app-compat.js"></script>
-    <script defer src="/__/firebase/11.10.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/11.10.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/11.10.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/11.10.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/11.10.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/11.10.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/11.10.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/11.10.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/11.10.0/firebase-performance-compat.js"></script>
-    <script defer src="/__/firebase/init.js?useEmulator=false"></script>
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://allhub.progesio.my.id" crossorigin>
+
+    <!-- Critical CSS - Inline for faster loading -->
+    <style>
+        /* Critical CSS untuk above-the-fold content */
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #7f1d1d;
+            color: white;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Header styles */
+        .header-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: linear-gradient(to bottom, #7f1d1d, rgba(127, 29, 29, 0.9), transparent);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        /* Hero section critical styles */
+        .hero-section {
+            position: relative;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 1rem;
+            margin-top: 4rem;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.45);
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 36rem;
+            color: white;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            font-weight: 400;
+            opacity: 0.95;
+        }
+
+        /* Loading animation */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s;
+        }
+
+        .loading-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 4px solid rgba(127, 29, 29, 0.3);
+            border-top: 4px solid #7f1d1d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Mobile responsive */
+        @media (min-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Utility classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .btn-primary {
+            background-color: #7f1d1d;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #991b1b;
+        }
+    </style>
+
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    </noscript>
+
+    <!-- Load Tailwind CSS asynchronously -->
+    <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
+    <script src="https://cdn.tailwindcss.com" defer></script>
+
+    <!-- Load Owl Carousel CSS asynchronously -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    </noscript>
+
+    <!-- Firebase SDK Scripts - Load asynchronously -->
+    <script>
+        // Load Firebase SDK asynchronously
+        const loadFirebaseSDK = () => {
+            const scripts = [
+                '/__/firebase/11.10.0/firebase-app-compat.js',
+                '/__/firebase/11.10.0/firebase-firestore-compat.js',
+                '/__/firebase/11.10.0/firebase-analytics-compat.js',
+                '/__/firebase/11.10.0/firebase-performance-compat.js',
+                '/__/firebase/init.js?useEmulator=false'
+            ];
+
+            scripts.forEach((src, index) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.defer = true;
+                if (index === scripts.length - 1) {
+                    script.onload = () => {
+                        // Firebase loaded, initialize app
+                        if (typeof firebase !== 'undefined') {
+                            console.log('Firebase SDK loaded successfully');
+                            // Initialize analytics and performance if available
+                            if (typeof firebase.analytics === 'function') {
+                                firebase.analytics();
+                            }
+                            if (typeof firebase.performance === 'function') {
+                                firebase.performance();
+                            }
+                        }
+                    };
+                }
+                document.head.appendChild(script);
+            });
+        };
+
+        // Load Firebase after critical content
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadFirebaseSDK);
+        } else {
+            loadFirebaseSDK();
+        }
+    </script>
 </head>
 
 <body class="bg-red-900 text-white font-montserrat leading-relaxed">
-    <header class="fixed w-full top-0 z-50 bg-gradient-to-b from-red-900 via-red-900/90 to-transparent">
-        <nav class="container mx-auto flex justify-between items-center p-4">
-            <div class="text-2xl font-bold tracking-widest">ARGENTA</div>
+    <header class="header-fixed">
+        <nav class="nav-container">
+            <div class="logo">
+                <img src="https://allhub.progesio.my.id/storage/ARGENTA%20ASSET/Logo/Argenta-removebg-preview.png"
+                    alt="Argenta Intramas Logo" class="h-10 w-auto max-h-12 object-contain align-middle"
+                    style="max-width:160px;" loading="lazy" />
+            </div>
             <!-- Hamburger button (mobile only) -->
             <button id="hamburger"
                 class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none"
@@ -184,21 +390,68 @@
     </div>
 
     <!-- Loading Overlay -->
-    <div id="page-loading"
-        class="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-[9999] transition-opacity duration-300">
-        <div class="flex flex-col items-center">
-            <svg class="animate-spin h-12 w-12 text-red-900 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-            </svg>
-            <span class="text-white text-lg font-semibold">Memuat halaman...</span>
-        </div>
+    <div id="page-loading" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <span class="text-white text-lg font-semibold">Memuat halaman...</span>
     </div>
 
-    <!-- jQuery & Owl Carousel JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <!-- Load jQuery & Owl Carousel JS asynchronously -->
+    <script>
+        // Load external scripts asynchronously
+        const loadExternalScripts = () => {
+            const scripts = [
+                'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js'
+            ];
+
+            let loadedScripts = 0;
+
+            scripts.forEach((src) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.defer = true;
+                script.onload = () => {
+                    loadedScripts++;
+                    if (loadedScripts === scripts.length) {
+                        // All scripts loaded, initialize app
+                        initializeApp();
+                    }
+                };
+                document.head.appendChild(script);
+            });
+        };
+
+        // Initialize app after all scripts are loaded
+        const initializeApp = () => {
+            // Wait for DOM to be ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', startApp);
+            } else {
+                startApp();
+            }
+        };
+
+        // Start app
+        const startApp = async () => {
+            try {
+                await loadKontenJSON();
+                renderAllSections();
+                initializeCarousels();
+                setupEventListeners();
+                hideLoading();
+            } catch (error) {
+                console.error('Error starting app:', error);
+                hideLoading();
+            }
+        };
+
+        // Load scripts when page is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadExternalScripts);
+        } else {
+            loadExternalScripts();
+        }
+    </script>
 
     <script>
         const modal = document.getElementById('modal');
@@ -219,15 +472,28 @@
         };
         let kontenHero = defaultHeroData;
 
-        // Fungsi helper untuk menangani URL gambar
+        // Enhanced image URL handler with optimization
         function getImageUrl(imagePath) {
-            if (!imagePath) return '';
-            // Jika sudah memiliki protocol (http/https) atau data URI, return as is
+            if (!imagePath) return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNTguMzM2IDE4MEM0OS42NzEgMTgwIDQ5LjY3MSAyMjAgMjU4LjMzNiAyMjBDNDY3IDE4MCA0NjcgMjIwIDI1OC4zMzYgMjIwWiIgZmlsbD0iI0U1RTdFQiIvPgo8L3N2Zz4K'; // Default placeholder
+
+            // If already has protocol (http/https) or data URI, return as is
             if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('data:')) {
                 return imagePath;
             }
-            // Jika path relatif, tambahkan base URL
-            return `https://allhub.progesio.my.id/storage/${imagePath}`;
+
+            // For relative paths, add base URL with optimization parameters
+            const baseUrl = 'https://allhub.progesio.my.id/storage/';
+
+            // Add optimization parameters for better loading
+            const optimizedUrl = baseUrl + imagePath;
+
+            // Add image optimization parameters if it's a supported image format
+            if (imagePath.match(/\.(jpg|jpeg|png|webp)$/i)) {
+                const separator = optimizedUrl.includes('?') ? '&' : '?';
+                return optimizedUrl + separator + 'w=800&q=75&auto=format';
+            }
+
+            return optimizedUrl;
         }
 
         // Default data fallback
@@ -404,113 +670,124 @@
             document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         }
 
-        // Fungsi untuk load data dari API eksternal dengan Firebase caching
+        // Enhanced load content with error handling and retries
         async function loadKontenJSON() {
-            try {
-                // Cek apakah data sudah ada di Firebase cache
-                const cacheResult = await getCacheFromFirebase();
+            const maxRetries = 3;
+            let retryCount = 0;
 
-                // Jika data ada di cache dan masih valid
-                if (cacheResult.data && cacheResult.isValid) {
-                    console.log('Menggunakan data dari Firebase cache');
+            while (retryCount < maxRetries) {
+                try {
+                    // Check Firebase cache first
+                    const cacheResult = await getCacheFromFirebase();
 
-                    // Assign data dari cache
-                    const cachedData = cacheResult.data;
-                    kontenHero = cachedData.kontenHero || defaultHeroData;
-                    kontenLayanan = cachedData.kontenLayanan || defaultData.kontenLayanan;
-
-                    if (cachedData.kontenKomisarisDirektur &&
-                        (cachedData.kontenKomisarisDirektur.komisaris || cachedData.kontenKomisarisDirektur.direktur)) {
-                        kontenKomisarisDirektur = {
-                            komisaris: cachedData.kontenKomisarisDirektur.komisaris || null,
-                            direktur: cachedData.kontenKomisarisDirektur.direktur || null
-                        };
-                    } else {
-                        kontenKomisarisDirektur = defaultData.kontenKomisarisDirektur;
+                    // If cache is valid, use it
+                    if (cacheResult.data && cacheResult.isValid) {
+                        console.log('Using data from Firebase cache');
+                        assignDataFromCache(cacheResult.data);
+                        return;
                     }
 
-                    kontenVisiMisi = cachedData.kontenVisiMisi || defaultData.kontenVisiMisi;
-                    kontenKoneksiWilayah = cachedData.kontenKoneksiWilayah || defaultData.kontenKoneksiWilayah;
+                    // Fetch from API with timeout
+                    console.log('Fetching fresh data from API');
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-                    if (cachedData.kontenPerusahaanDipercaya) {
-                        kontenPerusahaanDipercaya = {
-                            judul: cachedData.kontenPerusahaanDipercaya.judul || defaultData.kontenPerusahaanDipercaya.judul,
-                            logo: cachedData.kontenPerusahaanDipercaya.logo || null
-                        };
-                    } else {
-                        kontenPerusahaanDipercaya = defaultData.kontenPerusahaanDipercaya;
+                    const res = await fetch('https://allhub.progesio.my.id/api/hub/argenta/index', {
+                        signal: controller.signal,
+                        headers: {
+                            'Accept': 'application/json',
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
+
+                    clearTimeout(timeoutId);
+
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
                     }
 
-                    kontenTentangKami = cachedData.kontenTentangKami || defaultData.kontenTentangKami;
+                    const response = await res.json();
 
-                    return; // Keluar dari fungsi karena menggunakan cache
+                    // Validate response structure
+                    if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+                        throw new Error('Invalid API response format');
+                    }
+
+                    const data = response.data[0];
+                    assignDataFromAPI(data);
+
+                    // Save to Firebase cache
+                    await setCacheToFirebase(data);
+
+                    console.log('Data successfully loaded from API and cached');
+                    return;
+
+                } catch (error) {
+                    console.error(`Attempt ${retryCount + 1} failed:`, error);
+                    retryCount++;
+
+                    if (retryCount < maxRetries) {
+                        console.log(`Retrying in ${retryCount * 1000}ms...`);
+                        await new Promise(resolve => setTimeout(resolve, retryCount * 1000));
+                    }
                 }
-
-                // Jika tidak ada cache atau sudah expired, hit ke server
-                console.log('Mengambil data dari server API');
-                const res = await fetch('https://allhub.progesio.my.id/api/hub/argenta/index');
-                if (!res.ok) throw new Error('Gagal memuat data dari API');
-
-                const response = await res.json();
-
-                // Validasi struktur response
-                if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
-                    throw new Error('Format response API tidak valid');
-                }
-
-                const data = response.data[0]; // Ambil data pertama dari array
-
-                // Assign data dengan fallback ke default jika tidak ada atau null
-                kontenHero = data.kontenHero || defaultHeroData;
-                kontenLayanan = data.kontenLayanan || defaultData.kontenLayanan;
-
-                // Handle null values untuk komisaris dan direktur
-                if (data.kontenKomisarisDirektur &&
-                    (data.kontenKomisarisDirektur.komisaris || data.kontenKomisarisDirektur.direktur)) {
-                    kontenKomisarisDirektur = {
-                        komisaris: data.kontenKomisarisDirektur.komisaris || null,
-                        direktur: data.kontenKomisarisDirektur.direktur || null
-                    };
-                } else {
-                    kontenKomisarisDirektur = defaultData.kontenKomisarisDirektur;
-                }
-
-                kontenVisiMisi = data.kontenVisiMisi || defaultData.kontenVisiMisi;
-                kontenKoneksiWilayah = data.kontenKoneksiWilayah || defaultData.kontenKoneksiWilayah;
-
-                // Handle null values untuk logo perusahaan
-                if (data.kontenPerusahaanDipercaya) {
-                    kontenPerusahaanDipercaya = {
-                        judul: data.kontenPerusahaanDipercaya.judul || defaultData.kontenPerusahaanDipercaya.judul,
-                        logo: data.kontenPerusahaanDipercaya.logo || null
-                    };
-                } else {
-                    kontenPerusahaanDipercaya = defaultData.kontenPerusahaanDipercaya;
-                }
-
-                kontenTentangKami = data.kontenTentangKami || defaultData.kontenTentangKami;
-
-                // Simpan data ke Firebase cache
-                await setCacheToFirebase(data);
-
-                console.log('Data berhasil dimuat dari API dan disimpan ke Firebase cache:', data);
-
-            } catch (e) {
-                console.error('Error loading API data:', e);
-
-                // Hapus cache jika ada error
-                await clearCacheFromFirebase();
-
-                // Fallback ke data default jika API gagal
-                kontenLayanan = defaultData.kontenLayanan;
-                kontenKomisarisDirektur = defaultData.kontenKomisarisDirektur;
-                kontenVisiMisi = defaultData.kontenVisiMisi;
-                kontenKoneksiWilayah = defaultData.kontenKoneksiWilayah;
-                kontenPerusahaanDipercaya = defaultData.kontenPerusahaanDipercaya;
-                kontenTentangKami = defaultData.kontenTentangKami;
-
-                alert('Gagal memuat konten dari server, menggunakan konten default!');
             }
+
+            // If all retries failed, use default data
+            console.error('All attempts failed, using default data');
+            await clearCacheFromFirebase();
+            assignDefaultData();
+        }
+
+        // Helper function to assign data from cache
+        function assignDataFromCache(cachedData) {
+            kontenHero = cachedData.kontenHero || defaultHeroData;
+            kontenLayanan = cachedData.kontenLayanan || defaultData.kontenLayanan;
+            kontenKomisarisDirektur = cachedData.kontenKomisarisDirektur &&
+                (cachedData.kontenKomisarisDirektur.komisaris || cachedData.kontenKomisarisDirektur.direktur) ?
+                {
+                    komisaris: cachedData.kontenKomisarisDirektur.komisaris || null,
+                    direktur: cachedData.kontenKomisarisDirektur.direktur || null
+                } : defaultData.kontenKomisarisDirektur;
+            kontenVisiMisi = cachedData.kontenVisiMisi || defaultData.kontenVisiMisi;
+            kontenKoneksiWilayah = cachedData.kontenKoneksiWilayah || defaultData.kontenKoneksiWilayah;
+            kontenPerusahaanDipercaya = cachedData.kontenPerusahaanDipercaya ?
+                {
+                    judul: cachedData.kontenPerusahaanDipercaya.judul || defaultData.kontenPerusahaanDipercaya.judul,
+                    logo: cachedData.kontenPerusahaanDipercaya.logo || null
+                } : defaultData.kontenPerusahaanDipercaya;
+            kontenTentangKami = cachedData.kontenTentangKami || defaultData.kontenTentangKami;
+        }
+
+        // Helper function to assign data from API
+        function assignDataFromAPI(data) {
+            kontenHero = data.kontenHero || defaultHeroData;
+            kontenLayanan = data.kontenLayanan || defaultData.kontenLayanan;
+            kontenKomisarisDirektur = data.kontenKomisarisDirektur &&
+                (data.kontenKomisarisDirektur.komisaris || data.kontenKomisarisDirektur.direktur) ?
+                {
+                    komisaris: data.kontenKomisarisDirektur.komisaris || null,
+                    direktur: data.kontenKomisarisDirektur.direktur || null
+                } : defaultData.kontenKomisarisDirektur;
+            kontenVisiMisi = data.kontenVisiMisi || defaultData.kontenVisiMisi;
+            kontenKoneksiWilayah = data.kontenKoneksiWilayah || defaultData.kontenKoneksiWilayah;
+            kontenPerusahaanDipercaya = data.kontenPerusahaanDipercaya ?
+                {
+                    judul: data.kontenPerusahaanDipercaya.judul || defaultData.kontenPerusahaanDipercaya.judul,
+                    logo: data.kontenPerusahaanDipercaya.logo || null
+                } : defaultData.kontenPerusahaanDipercaya;
+            kontenTentangKami = data.kontenTentangKami || defaultData.kontenTentangKami;
+        }
+
+        // Helper function to assign default data
+        function assignDefaultData() {
+            kontenHero = defaultHeroData;
+            kontenLayanan = defaultData.kontenLayanan;
+            kontenKomisarisDirektur = defaultData.kontenKomisarisDirektur;
+            kontenVisiMisi = defaultData.kontenVisiMisi;
+            kontenKoneksiWilayah = defaultData.kontenKoneksiWilayah;
+            kontenPerusahaanDipercaya = defaultData.kontenPerusahaanDipercaya;
+            kontenTentangKami = defaultData.kontenTentangKami;
         }
 
         // Fungsi untuk menghapus cache manual (bisa dipanggil dari console untuk testing)
@@ -645,35 +922,140 @@
             }
         }
 
-        // Hamburger menu logic
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
-        function showMenu() {
-            navMenu.classList.remove('opacity-0', 'invisible', 'hidden');
-            navMenu.classList.add('opacity-100', 'visible');
+        // Render all sections
+        function renderAllSections() {
+            renderHero();
+            renderVisiMisi();
+            renderKomisarisDirektur();
+            renderKoneksiWilayah();
+            renderLayanan();
+            renderPerusahaanDipercaya();
+            renderTentangKami();
         }
-        function hideMenu() {
-            navMenu.classList.remove('opacity-100', 'visible');
-            navMenu.classList.add('opacity-0', 'invisible', 'hidden');
-        }
-        hamburger.addEventListener('click', () => {
-            const isOpen = navMenu.classList.contains('opacity-100');
-            if (isOpen) {
-                hideMenu();
-            } else {
-                showMenu();
+
+        // Initialize carousels
+        function initializeCarousels() {
+            // Wait for jQuery to be available
+            if (typeof $ === 'undefined') {
+                setTimeout(initializeCarousels, 100);
+                return;
             }
-        });
-        // Close menu on link click (mobile)
-        navMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) {
+
+            setTimeout(() => {
+                try {
+                    // Initialize Layanan Carousel
+                    const $layananCarousel = $('.layanan-carousel');
+                    if ($layananCarousel.length) {
+                        $layananCarousel.owlCarousel({
+                            loop: true,
+                            margin: 24,
+                            nav: false,
+                            dots: true,
+                            responsive: {
+                                0: { items: 1 },
+                                600: { items: 2 },
+                                1000: { items: 3 }
+                            }
+                        });
+                    }
+
+                    // Initialize Hero Carousel
+                    const $heroCarousel = $('.hero-carousel');
+                    if ($heroCarousel.length) {
+                        $heroCarousel.owlCarousel({
+                            items: 1,
+                            loop: true,
+                            nav: false,
+                            dots: true,
+                            autoplay: true,
+                            autoplayTimeout: 5000,
+                            animateOut: 'fadeOut',
+                            animateIn: 'fadeIn',
+                            smartSpeed: 800
+                        });
+                    }
+
+                    // Initialize Company Carousel
+                    const $companyCarousel = $('.owl-carousel.owl-theme');
+                    if ($companyCarousel.length) {
+                        $companyCarousel.owlCarousel({
+                            loop: true,
+                            margin: 24,
+                            nav: false,
+                            dots: true,
+                            responsive: {
+                                0: { items: 1 },
+                                600: { items: 2 },
+                                1000: { items: 3 }
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error initializing carousels:', error);
+                }
+            }, 200);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Hamburger menu
+            setupHamburgerMenu();
+
+            // Navigation loading
+            setupNavigationLoading();
+
+            // Service worker registration
+            registerServiceWorker();
+        }
+
+        // Setup hamburger menu
+        function setupHamburgerMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
+
+            if (!hamburger || !navMenu) return;
+
+            function showMenu() {
+                navMenu.classList.remove('opacity-0', 'invisible', 'hidden');
+                navMenu.classList.add('opacity-100', 'visible');
+            }
+
+            function hideMenu() {
+                navMenu.classList.remove('opacity-100', 'visible');
+                navMenu.classList.add('opacity-0', 'invisible', 'hidden');
+            }
+
+            hamburger.addEventListener('click', () => {
+                const isOpen = navMenu.classList.contains('opacity-100');
+                if (isOpen) {
                     hideMenu();
+                } else {
+                    showMenu();
                 }
             });
-        });
-        // Responsive fix on resize
-        window.addEventListener('resize', () => {
+
+            // Close menu on link click (mobile)
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 768) {
+                        hideMenu();
+                    }
+                });
+            });
+
+            // Responsive handling
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) {
+                    navMenu.classList.remove('opacity-0', 'invisible', 'hidden', 'flex-col', 'items-center', 'justify-center', 'space-y-8');
+                    navMenu.classList.add('opacity-100', 'visible', 'flex', 'flex-row', 'space-x-8');
+                } else {
+                    hideMenu();
+                    navMenu.classList.remove('flex-row', 'space-x-8');
+                    navMenu.classList.add('flex-col', 'items-center', 'justify-center', 'space-y-8');
+                }
+            });
+
+            // Initial state
             if (window.innerWidth >= 768) {
                 navMenu.classList.remove('opacity-0', 'invisible', 'hidden', 'flex-col', 'items-center', 'justify-center', 'space-y-8');
                 navMenu.classList.add('opacity-100', 'visible', 'flex', 'flex-row', 'space-x-8');
@@ -682,34 +1064,70 @@
                 navMenu.classList.remove('flex-row', 'space-x-8');
                 navMenu.classList.add('flex-col', 'items-center', 'justify-center', 'space-y-8');
             }
-        });
-        // Initial state
-        if (window.innerWidth >= 768) {
-            navMenu.classList.remove('opacity-0', 'invisible', 'hidden', 'flex-col', 'items-center', 'justify-center', 'space-y-8');
-            navMenu.classList.add('opacity-100', 'visible', 'flex', 'flex-row', 'space-x-8');
-        } else {
-            hideMenu();
-            navMenu.classList.remove('flex-row', 'space-x-8');
-            navMenu.classList.add('flex-col', 'items-center', 'justify-center', 'space-y-8');
         }
-        // Render konten dinamis ke section
+
+        // Setup navigation loading
+        function setupNavigationLoading() {
+            document.querySelectorAll('#navMenu a').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    const href = link.getAttribute('href');
+                    if (href && href !== '#' && !href.startsWith('javascript:')) {
+                        showLoading();
+                    }
+                });
+            });
+        }
+
+        // Register service worker
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            }
+        }
+        // Render hero section with optimized images
         function renderHero() {
             const el = document.getElementById('hero-section');
-            // Jika kontenHero adalah array, render carousel, jika bukan, render satu slide
+            if (!el) return;
+
+            // Add hero-section class for styling
+            el.className = 'hero-section';
+
+            // If kontenHero is array, render carousel, otherwise render single slide
             let slides = Array.isArray(kontenHero) ? kontenHero : [kontenHero];
-            el.innerHTML = `
-        <div class="owl-carousel hero-carousel">
-          ${slides.map(hero => `
-            <section class=\"relative h-[80vh] flex items-center justify-center text-center px-4 mt-16 bg-cover bg-center\" style=\"background-image: url('${getImageUrl(hero.background)}');\">
-              <div class=\"absolute inset-0 bg-black\" style=\"opacity: ${hero.overlay};\"></div>
-              <div class=\"relative max-w-xl text-white\">
-                <h1 class=\"text-4xl md:text-5xl font-extrabold mb-4\">${hero.title}</h1>
-                <div class=\"text-lg md:text-xl font-normal\">${hero.subtitle}</div>
-              </div>
-            </section>
-          `).join('')}
-        </div>
-      `;
+
+            if (slides.length === 1) {
+                // Single slide - no carousel needed
+                const hero = slides[0];
+                el.style.backgroundImage = `url('${getImageUrl(hero.background)}')`;
+                el.innerHTML = `
+                    <div class="hero-overlay"></div>
+                    <div class="hero-content">
+                        <h1 class="hero-title">${hero.title}</h1>
+                        <div class="hero-subtitle">${hero.subtitle}</div>
+                    </div>
+                `;
+            } else {
+                // Multiple slides - use carousel
+                el.innerHTML = `
+                    <div class="owl-carousel hero-carousel">
+                        ${slides.map(hero => `
+                            <div class="hero-section" style="background-image: url('${getImageUrl(hero.background)}');">
+                                <div class="hero-overlay"></div>
+                                <div class="hero-content">
+                                    <h1 class="hero-title">${hero.title}</h1>
+                                    <div class="hero-subtitle">${hero.subtitle}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
         }
         function renderVisiMisi() {
             const visiMisi = document.getElementById('visi-misi');
@@ -867,126 +1285,37 @@
         </div>
       `;
         }
-        // Loading overlay logic
+        // Loading overlay management
         function showLoading() {
-            document.getElementById('page-loading').style.opacity = '1';
-            document.getElementById('page-loading').style.pointerEvents = 'auto';
+            const loading = document.getElementById('page-loading');
+            if (loading) {
+                loading.style.opacity = '1';
+                loading.style.pointerEvents = 'auto';
+                loading.style.display = 'flex';
+            }
         }
+
         function hideLoading() {
-            document.getElementById('page-loading').style.opacity = '0';
-            document.getElementById('page-loading').style.pointerEvents = 'none';
-            setTimeout(() => {
-                document.getElementById('page-loading').style.display = 'none';
-            }, 400);
+            const loading = document.getElementById('page-loading');
+            if (loading) {
+                loading.style.opacity = '0';
+                loading.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                }, 400);
+            }
         }
-        // Show loading on menu click
         document.addEventListener('DOMContentLoaded', async function () {
-            await loadKontenJSON();
-            renderHero();
-            renderVisiMisi();
-            renderKomisarisDirektur();
-            renderKoneksiWilayah();
-            renderLayanan();
-            renderPerusahaanDipercaya();
-            renderTentangKami();
-            // Inisialisasi ulang Owl Carousel setelah render
-            setTimeout(function () {
-                $('.layanan-carousel').owlCarousel({
-                    loop: true,
-                    margin: 24,
-                    nav: false,
-                    dots: true,
-                    responsive: {
-                        0: { items: 1 },
-                        600: { items: 2 },
-                        1000: { items: 3 }
-                    }
-                });
-                $('.hero-carousel').owlCarousel({
-                    items: 1,
-                    loop: true,
-                    nav: false,
-                    dots: true,
-                    autoplay: true,
-                    autoplayTimeout: 5000,
-                    animateOut: 'fadeOut',
-                    animateIn: 'fadeIn',
-                    smartSpeed: 800
-                });
-                $('.owl-carousel.owl-theme').owlCarousel({
-                    loop: true,
-                    margin: 24,
-                    nav: false,
-                    dots: true,
-                    responsive: {
-                        0: { items: 1 },
-                        600: { items: 2 },
-                        1000: { items: 3 }
-                    }
-                });
-            }, 100);
-            document.querySelectorAll('#navMenu a').forEach(link => {
-                link.addEventListener('click', function (e) {
-                    const href = link.getAttribute('href');
-                    if (href && href !== '#' && !href.startsWith('javascript:')) {
-                        showLoading();
-                    }
-                });
-            });
-            // Hide loading after page load
-            window.addEventListener('load', hideLoading);
-            setTimeout(hideLoading, 2000); // Fallback hide
-
-            // Firebase SDK initialization and detection
-            try {
-                // Wait for Firebase to load
-                const waitForFirebase = () => {
-                    if (typeof firebase !== 'undefined') {
-                        let app = firebase.app();
-                        let features = [
-                            'auth',
-                            'database',
-                            'firestore',
-                            'functions',
-                            'messaging',
-                            'storage',
-                            'analytics',
-                            'remoteConfig',
-                            'performance',
-                        ].filter(feature => typeof app[feature] === 'function');
-                        console.log(`Firebase SDK loaded with ${features.join(', ')}`);
-
-                        // Initialize analytics if available
-                        if (typeof firebase.analytics === 'function') {
-                            firebase.analytics();
-                        }
-
-                        // Initialize performance monitoring if available
-                        if (typeof firebase.performance === 'function') {
-                            firebase.performance();
-                        }
-                    } else {
-                        console.log('Firebase SDK not yet loaded, retrying...');
-                        setTimeout(waitForFirebase, 100);
-                    }
-                };
-
-                // Start checking for Firebase after a short delay
-                setTimeout(waitForFirebase, 500);
-            } catch (e) {
-                console.error('Error loading the Firebase SDK:', e);
-            }
-
-            // Register Service Worker for image caching
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js')
-                    .then((registration) => {
-                        console.log('Service Worker registered successfully:', registration.scope);
-                    })
-                    .catch((error) => {
-                        console.log('Service Worker registration failed:', error);
-                    });
-            }
+            console.log('DOM loaded, app initialization handled by async script loader');
+            const checkFirebaseStatus = () => {
+                if (typeof firebase !== 'undefined') {
+                    console.log('Firebase SDK detected and ready');
+                } else {
+                    console.log('Firebase SDK still loading...');
+                    setTimeout(checkFirebaseStatus, 500);
+                }
+            };
+            setTimeout(checkFirebaseStatus, 1000);
         });
     </script>
 </body>
