@@ -276,46 +276,187 @@
             }
         };
 
-        // Fungsi helper untuk mengelola cookies
-        function setCookie(name, value, hours) {
-            const date = new Date();
-            date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
-            const expires = "expires=" + date.toUTCString();
-            document.cookie = name + "=" + JSON.stringify(value) + ";" + expires + ";path=/";
+        // Fungsi helper untuk mengelola cache di Firebase Realtime Database
+        function setCacheToFirebase(name, value, minutes) {
+            return new Promise((resolve, reject) => {
+                if (typeof firebase === 'undefined' || !firebase.database) {
+                    console.warn('Firebase database tidak tersedia, menggunakan localStorage sebagai fallback');
+                    // Fallback ke localStorage
+                    const cacheData = {
+                        data: value,
+                        timestamp: Date.now(),
+                        expiry: Date.now() + (minutes * 60 * 1000)
+                    };
+                    localStorage.setItem(name, JSON.stringify(cacheData));
+                    resolve();
+                    return;
+                }
+
+                try {
+                    const database = firebase.database();
+                    const cacheData = {
+                        data: value,
+                        timestamp: Date.now(),
+                        expiry: Date.now() + (minutes * 60 * 1000)
+                    };
+
+                    database.ref('dcrosCache/' + name).set(cacheData)
+                        .then(() => {
+                            console.log(`Cache ${name} berhasil disimpan ke Firebase`);
+                            resolve();
+                        })
+                        .catch((error) => {
+                            console.error('Error menyimpan cache ke Firebase:', error);
+                            // Fallback ke localStorage
+                            localStorage.setItem(name, JSON.stringify(cacheData));
+                            resolve();
+                        });
+                } catch (error) {
+                    console.error('Error mengakses Firebase:', error);
+                    // Fallback ke localStorage
+                    const cacheData = {
+                        data: value,
+                        timestamp: Date.now(),
+                        expiry: Date.now() + (minutes * 60 * 1000)
+                    };
+                    localStorage.setItem(name, JSON.stringify(cacheData));
+                    resolve();
+                }
+            });
         }
 
-        function getCookie(name) {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) == 0) {
-                    try {
-                        return JSON.parse(c.substring(nameEQ.length, c.length));
-                    } catch (e) {
-                        return null;
+        function getCacheFromFirebase(name) {
+            return new Promise((resolve, reject) => {
+                if (typeof firebase === 'undefined' || !firebase.database) {
+                    console.warn('Firebase database tidak tersedia, menggunakan localStorage sebagai fallback');
+                    // Fallback ke localStorage
+                    const cachedData = localStorage.getItem(name);
+                    if (cachedData) {
+                        try {
+                            const parsed = JSON.parse(cachedData);
+                            if (Date.now() > parsed.expiry) {
+                                localStorage.removeItem(name);
+                                resolve(null);
+                            } else {
+                                resolve(parsed.data);
+                            }
+                        } catch (e) {
+                            localStorage.removeItem(name);
+                            resolve(null);
+                        }
+                    } else {
+                        resolve(null);
+                    }
+                    return;
+                }
+
+                try {
+                    const database = firebase.database();
+                    database.ref('dcrosCache/' + name).once('value')
+                        .then((snapshot) => {
+                            const cacheData = snapshot.val();
+                            if (cacheData) {
+                                // Cek apakah cache sudah expired
+                                if (Date.now() > cacheData.expiry) {
+                                    console.log(`Cache ${name} sudah expired, menghapus...`);
+                                    database.ref('dcrosCache/' + name).remove();
+                                    resolve(null);
+                                } else {
+                                    console.log(`Cache ${name} ditemukan dan masih valid`);
+                                    resolve(cacheData.data);
+                                }
+                            } else {
+                                console.log(`Cache ${name} tidak ditemukan`);
+                                resolve(null);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error membaca cache dari Firebase:', error);
+                            // Fallback ke localStorage
+                            const cachedData = localStorage.getItem(name);
+                            if (cachedData) {
+                                try {
+                                    const parsed = JSON.parse(cachedData);
+                                    if (Date.now() > parsed.expiry) {
+                                        localStorage.removeItem(name);
+                                        resolve(null);
+                                    } else {
+                                        resolve(parsed.data);
+                                    }
+                                } catch (e) {
+                                    localStorage.removeItem(name);
+                                    resolve(null);
+                                }
+                            } else {
+                                resolve(null);
+                            }
+                        });
+                } catch (error) {
+                    console.error('Error mengakses Firebase:', error);
+                    // Fallback ke localStorage
+                    const cachedData = localStorage.getItem(name);
+                    if (cachedData) {
+                        try {
+                            const parsed = JSON.parse(cachedData);
+                            if (Date.now() > parsed.expiry) {
+                                localStorage.removeItem(name);
+                                resolve(null);
+                            } else {
+                                resolve(parsed.data);
+                            }
+                        } catch (e) {
+                            localStorage.removeItem(name);
+                            resolve(null);
+                        }
+                    } else {
+                        resolve(null);
                     }
                 }
-            }
-            return null;
+            });
         }
 
-        function deleteCookie(name) {
-            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        function deleteCacheFromFirebase(name) {
+            return new Promise((resolve, reject) => {
+                if (typeof firebase === 'undefined' || !firebase.database) {
+                    console.warn('Firebase database tidak tersedia, menggunakan localStorage sebagai fallback');
+                    localStorage.removeItem(name);
+                    resolve();
+                    return;
+                }
+
+                try {
+                    const database = firebase.database();
+                    database.ref('dcrosCache/' + name).remove()
+                        .then(() => {
+                            console.log(`Cache ${name} berhasil dihapus dari Firebase`);
+                            // Hapus juga dari localStorage jika ada
+                            localStorage.removeItem(name);
+                            resolve();
+                        })
+                        .catch((error) => {
+                            console.error('Error menghapus cache dari Firebase:', error);
+                            // Hapus dari localStorage sebagai fallback
+                            localStorage.removeItem(name);
+                            resolve();
+                        });
+                } catch (error) {
+                    console.error('Error mengakses Firebase:', error);
+                    localStorage.removeItem(name);
+                    resolve();
+                }
+            });
         }
 
-        // Fungsi untuk load data dari API eksternal dengan caching
+        // Fungsi untuk load data dari API eksternal dengan caching di Firebase
         async function loadKontenJSON() {
             try {
-                // Cek apakah data sudah ada di cookies
-                const cachedData = getCookie('argentaData');
-                const cacheTimestamp = getCookie('argentaDataTimestamp');
-                
-                // Jika data ada di cache dan belum expired (1 jam = 3600000 ms)
-                if (cachedData && cacheTimestamp && (Date.now() - cacheTimestamp < 3600000)) {
-                    console.log('Menggunakan data dari cache cookies');
-                    
+                // Cek apakah data sudah ada di Firebase cache
+                const cachedData = await getCacheFromFirebase('argentaData');
+
+                // Jika data ada di cache dan belum expired (akan otomatis dicek di getCacheFromFirebase)
+                if (cachedData) {
+                    console.log('Menggunakan data dari cache Firebase');
+
                     // Assign data dari cache
                     kontenHero = cachedData.kontenHero || defaultHeroData;
                     kontenLayanan = cachedData.kontenLayanan || defaultData.kontenLayanan;
@@ -343,7 +484,7 @@
                     }
 
                     kontenTentangKami = cachedData.kontenTentangKami || defaultData.kontenTentangKami;
-                    
+
                     return; // Keluar dari fungsi karena menggunakan cache
                 }
 
@@ -391,18 +532,16 @@
 
                 kontenTentangKami = data.kontenTentangKami || defaultData.kontenTentangKami;
 
-                // Simpan data ke cookies dengan timestamp
-                setCookie('argentaData', data, 1); // Simpan selama 1 jam
-                setCookie('argentaDataTimestamp', Date.now(), 1); // Simpan timestamp
+                // Simpan data ke Firebase cache selama 1 menit
+                await setCacheToFirebase('argentaData', data, 1);
 
-                console.log('Data berhasil dimuat dari API dan disimpan ke cache:', data);
+                console.log('Data berhasil dimuat dari API dan disimpan ke Firebase cache:', data);
 
             } catch (e) {
                 console.error('Error loading API data:', e);
 
                 // Hapus cache jika ada error
-                deleteCookie('argentaData');
-                deleteCookie('argentaDataTimestamp');
+                await deleteCacheFromFirebase('argentaData');
 
                 // Fallback ke data default jika API gagal
                 kontenLayanan = defaultData.kontenLayanan;
@@ -417,29 +556,123 @@
         }
 
         // Fungsi untuk menghapus cache manual (bisa dipanggil dari console untuk testing)
-        function clearCache() {
-            deleteCookie('argentaData');
-            deleteCookie('argentaDataTimestamp');
-            console.log('Cache data Argenta berhasil dihapus');
+        async function clearCache() {
+            await deleteCacheFromFirebase('argentaData');
+            console.log('Cache data Argenta berhasil dihapus dari Firebase');
         }
 
         // Fungsi untuk cek status cache (bisa dipanggil dari console untuk testing)
-        function checkCache() {
-            const cachedData = getCookie('argentaData');
-            const cacheTimestamp = getCookie('argentaDataTimestamp');
-            
-            if (cachedData && cacheTimestamp) {
-                const timeLeft = 3600000 - (Date.now() - cacheTimestamp);
-                const minutesLeft = Math.floor(timeLeft / 60000);
-                console.log(`Cache tersedia, sisa waktu: ${minutesLeft} menit`);
-                return { 
-                    hasCache: true, 
-                    minutesLeft: minutesLeft,
-                    data: cachedData 
+        async function checkCache() {
+            try {
+                const cachedData = await getCacheFromFirebase('argentaData');
+
+                if (cachedData) {
+                    console.log('Cache tersedia di Firebase');
+                    return {
+                        hasCache: true,
+                        data: cachedData
+                    };
+                } else {
+                    console.log('Tidak ada cache tersedia di Firebase');
+                    return { hasCache: false };
+                }
+            } catch (error) {
+                console.error('Error mengecek cache:', error);
+                return { hasCache: false, error: error.message };
+            }
+        }
+
+        // Fungsi untuk membersihkan semua cache expired di Firebase (maintenance)
+        async function cleanExpiredCache() {
+            if (typeof firebase === 'undefined' || !firebase.database) {
+                console.warn('Firebase database tidak tersedia');
+                return;
+            }
+
+            try {
+                const database = firebase.database();
+                const snapshot = await database.ref('dcrosCache').once('value');
+                const allCache = snapshot.val();
+
+                if (allCache) {
+                    const now = Date.now();
+                    const expiredKeys = [];
+
+                    Object.keys(allCache).forEach(key => {
+                        if (allCache[key].expiry && now > allCache[key].expiry) {
+                            expiredKeys.push(key);
+                        }
+                    });
+
+                    // Hapus cache yang expired
+                    const deletePromises = expiredKeys.map(key =>
+                        database.ref('dcrosCache/' + key).remove()
+                    );
+
+                    await Promise.all(deletePromises);
+                    console.log(`Berhasil menghapus ${expiredKeys.length} cache expired dari Firebase`);
+                } else {
+                    console.log('Tidak ada cache di Firebase');
+                }
+            } catch (error) {
+                console.error('Error membersihkan cache expired:', error);
+            }
+        }
+
+        // Fungsi untuk monitoring penggunaan cache (debugging)
+        async function getCacheStats() {
+            if (typeof firebase === 'undefined' || !firebase.database) {
+                console.warn('Firebase database tidak tersedia');
+                return { error: 'Firebase tidak tersedia' };
+            }
+
+            try {
+                const database = firebase.database();
+                const snapshot = await database.ref('dcrosCache').once('value');
+                const allCache = snapshot.val();
+
+                if (!allCache) {
+                    return {
+                        totalCache: 0,
+                        activeCache: 0,
+                        expiredCache: 0,
+                        cacheList: []
+                    };
+                }
+
+                const now = Date.now();
+                let activeCount = 0;
+                let expiredCount = 0;
+                const cacheList = [];
+
+                Object.keys(allCache).forEach(key => {
+                    const cache = allCache[key];
+                    const isExpired = cache.expiry && now > cache.expiry;
+
+                    if (isExpired) {
+                        expiredCount++;
+                    } else {
+                        activeCount++;
+                    }
+
+                    cacheList.push({
+                        key: key,
+                        created: new Date(cache.timestamp).toLocaleString(),
+                        expires: new Date(cache.expiry).toLocaleString(),
+                        isExpired: isExpired,
+                        timeLeft: isExpired ? 0 : Math.floor((cache.expiry - now) / 1000) + ' detik'
+                    });
+                });
+
+                return {
+                    totalCache: Object.keys(allCache).length,
+                    activeCache: activeCount,
+                    expiredCache: expiredCount,
+                    cacheList: cacheList
                 };
-            } else {
-                console.log('Tidak ada cache tersedia');
-                return { hasCache: false };
+            } catch (error) {
+                console.error('Error mendapatkan statistik cache:', error);
+                return { error: error.message };
             }
         }
 
@@ -679,6 +912,11 @@
         }
         // Show loading on menu click
         document.addEventListener('DOMContentLoaded', async function () {
+            // Bersihkan cache expired di background
+            setTimeout(() => {
+                cleanExpiredCache();
+            }, 2000);
+
             await loadKontenJSON();
             renderHero();
             renderVisiMisi();
@@ -762,6 +1000,18 @@
                         // Initialize performance monitoring if available
                         if (typeof firebase.performance === 'function') {
                             firebase.performance();
+                        }
+
+                        // Log Firebase Database connection status
+                        if (typeof firebase.database === 'function') {
+                            const database = firebase.database();
+                            database.ref('.info/connected').on('value', (snapshot) => {
+                                if (snapshot.val() === true) {
+                                    console.log('Firebase Realtime Database terhubung');
+                                } else {
+                                    console.log('Firebase Realtime Database terputus');
+                                }
+                            });
                         }
                     } else {
                         console.log('Firebase SDK not yet loaded, retrying...');
