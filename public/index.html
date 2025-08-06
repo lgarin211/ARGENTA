@@ -172,12 +172,49 @@
     </footer>
 
     <!-- Modal -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-lg max-w-lg w-full p-6 relative">
-            <button id="closeModal"
-                class="absolute top-2 right-2 text-gray-700 hover:text-gray-900 text-2xl font-bold">&times;</button>
-            <h3 id="modalTitle" class="text-xl font-bold mb-4">-</h3>
-            <p id="modalContent" class="text-gray-800"></p>
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full relative shadow-2xl transform transition-all duration-300 scale-95 opacity-0"
+            id="modalDialog">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-red-900 to-red-700 text-white p-6 rounded-t-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -mr-16 -mt-16"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-5 rounded-full -ml-12 -mb-12"></div>
+                <button id="closeModal"
+                    class="absolute top-4 right-4 text-white hover:text-red-200 transition-colors duration-200 w-8 h-8 flex items-center justify-center rounded-full hover:bg-white hover:bg-opacity-20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" viewBox="0 0 24 24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="flex items-center space-x-3 relative z-10">
+                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                    </div>
+                    <h3 id="modalTitle" class="text-2xl font-bold">Detail Layanan</h3>
+                </div>
+            </div>
+            <!-- Content -->
+            <div class="p-6">
+                <div class="prose prose-gray max-w-none">
+                    <p id="modalContent" class="text-gray-700 leading-relaxed text-base"></p>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button id="closeModalBtn"
+                        class="bg-red-900 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 flex items-center space-x-2 font-medium">
+                        <span>Tutup</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M18 6L6 18M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -202,8 +239,51 @@
         const modal = document.getElementById('modal');
         const modalTitle = document.getElementById('modalTitle');
         const modalContent = document.getElementById('modalContent');
+        const modalDialog = document.getElementById('modalDialog');
         const closeModal = document.getElementById('closeModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
         const readMoreButtons = document.querySelectorAll('.read-more-btn');
+
+        // Fungsi untuk menampilkan modal dengan animasi
+        function showModal(title, content) {
+            modalTitle.textContent = title;
+            modalContent.textContent = content;
+            modal.classList.remove('hidden');
+
+            // Trigger animasi masuk
+            setTimeout(() => {
+                modalDialog.classList.remove('scale-95', 'opacity-0');
+                modalDialog.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // Fungsi untuk menutup modal dengan animasi
+        function hideModal() {
+            modalDialog.classList.remove('scale-100', 'opacity-100');
+            modalDialog.classList.add('scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Event listener untuk menutup modal
+        closeModal.addEventListener('click', hideModal);
+        closeModalBtn.addEventListener('click', hideModal);
+
+        // Tutup modal ketika klik di luar modal
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideModal();
+            }
+        });
+
+        // Tutup modal dengan tombol ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                hideModal();
+            }
+        });
 
         // Hapus semua deklarasi variabel konten dinamis, ganti dengan variabel global yang akan diisi dari JSON
         let kontenLayanan, kontenKomisarisDirektur, kontenVisiMisi, kontenKoneksiWilayah, kontenPerusahaanDipercaya, kontenTentangKami;
@@ -831,26 +911,59 @@
         }
         function renderLayanan() {
             const el = document.getElementById('layanan');
+
+            console.log('Rendering layanan with kontenLayanan:', kontenLayanan);
             el.innerHTML = `
         <div class="container mx-auto px-4">
           <h2 class="text-3xl font-bold mb-8 tracking-widest text-center">LAYANAN KAMI</h2>
           <div class="owl-carousel layanan-carousel">
-            ${Object.values(kontenLayanan).map(l => `
-              <div class="bg-white text-black rounded shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out cursor-pointer p-6 flex flex-col">
-                <div class="flex items-center mb-4">
-                  <svg class="w-10 h-10 text-red-900 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7L9 19L3 13"></path></svg>
-                  <h3 class="font-bold uppercase text-lg">${l.title}</h3>
+            ${Object.values(kontenLayanan).map((l, index) => `
+              <div class="bg-white text-black rounded-lg shadow-lg grayscale hover:grayscale-0 transition duration-300 ease-in-out overflow-hidden">
+                ${l.image ? `
+                <div class="h-48 w-full bg-gray-200 overflow-hidden">
+                  <img src="${getImageUrl(l.image)}" alt="${l.title}" class="w-full h-full object-cover" />
                 </div>
-                <p class="text-sm mb-6 flex-grow">${l.desc}</p>
-                <button class="read-more-btn self-start bg-red-900 text-white px-4 py-2 rounded hover:bg-red-700 transition flex items-center gap-2">
-                  Read More
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-                </button>
+                ` : ''}
+                <div class="p-6 flex flex-col h-full">
+                  <div class="flex items-start mb-4">
+                    <div class="w-12 h-12 bg-red-900 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                      </svg>
+                    </div>
+                    <h3 class="font-bold uppercase text-lg leading-tight">${l.title}</h3>
+                  </div>
+                  <p class="text-sm text-gray-600 mb-6 flex-grow leading-relaxed">
+                    ${l.desc && l.desc.length > 100 ? l.desc.substring(0, 100) + '...' : l.desc}
+                  </p>
+                  ${l.desc && l.desc.length > 100 ? `
+                  <button class="read-more-btn self-start bg-red-900 text-white px-4 py-2 rounded hover:bg-red-700 transition flex items-center gap-2" 
+                          data-title="${l.title}" data-index="${index}">
+                    Read More
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                  </button>
+                  ` : ''}
+                </div>
               </div>
             `).join('')}
           </div>
         </div>
       `;
+
+            // Tambahkan event listener untuk tombol read more setelah render
+            setTimeout(() => {
+                document.querySelectorAll('.read-more-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const title = this.getAttribute('data-title');
+                        const index = parseInt(this.getAttribute('data-index'));
+                        const layananArray = Object.values(kontenLayanan);
+                        const desc = layananArray[index] ? layananArray[index].desc : '';
+                        showModal(title, desc);
+                    });
+                });
+            }, 100);
         }
         function renderPerusahaanDipercaya() {
             const el = document.getElementById('perusahaan-dipercaya');
