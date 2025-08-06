@@ -6,7 +6,36 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "cleanUrls": true,
     "rewrites": [
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/karir",
+        "destination": "/karir.html"
+      },
+      {
+        "source": "/karir-detail",
+        "destination": "/karir-detail.html"
+      },
+      {
+        "source": "/berita",
+        "destination": "/berita.html"
+      },
+      {
+        "source": "/detailberita",
+        "destination": "/detailberita.html"
+      },
+      {
+        "source": "/pis",
+        "destination": "/pis.html"
+      },
+      {
+        "source": "/Neo",
+        "destination": "/Neo.html"
+      },
       {
         "source": "**",
         "destination": "/index.html"
