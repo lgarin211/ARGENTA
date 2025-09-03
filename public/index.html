@@ -56,8 +56,12 @@
                         class="block py-2 md:py-0 hover:text-red-500 font-medium">Artikel</a></li>
                 <li class="w-full md:w-auto text-center"><a href="./index.html#footer"
                         class="block py-2 md:py-0 hover:text-red-500 font-medium">Hubungi Kami</a></li>
-                <li class="w-full md:w-auto text-center"><a href="https://intramas.co.id/ati_ca/"
-                        class="block py-2 md:py-0 hover:text-red-500 font-medium">LOGIN</a></li>
+                <li class="w-full md:w-auto text-center">
+                    <button onclick="showLoginModal()"
+                        class="block py-2 md:py-0 hover:text-red-500 font-medium bg-transparent border-none cursor-pointer text-white hover:text-red-500 transition-colors duration-200">
+                        LOGIN
+                    </button>
+                </li>
             </ul>
         </nav>
     </header>
@@ -216,6 +220,31 @@
         </div>
     </div>
 
+    <!-- Login Modal dengan Iframe -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white rounded-2xl w-full relative shadow-2xl transform transition-all duration-300 scale-95 opacity-0"
+            id="loginModalDialog" style="width: 100dvw !important;height: 100dvh !important; overflow: hidden;">
+            <!-- Header -->
+            <div
+                class="bg-gradient-to-r from-red-900 to-red-700 text-white p-4 rounded-t-2xl relative overflow-hidden flex justify-between items-center">
+                <h3 class="text-xl font-bold">Login Argenta</h3>
+                <button id="closeLoginModal"
+                    class="text-white hover:text-red-200 transition-colors duration-200 w-8 h-8 flex items-center justify-center rounded-full hover:bg-white hover:bg-opacity-20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" viewBox="0 0 24 24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <!-- Iframe Content -->
+            <div class="h-full">
+                <iframe id="loginIframe" src="" class="w-full h-[calc(100%-60px)] border-0 rounded-b-2xl"
+                    title="Login Argenta"></iframe>
+            </div>
+        </div>
+    </div>
+
     <!-- Loading Overlay -->
     <div id="page-loading"
         class="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-[9999] transition-opacity duration-300">
@@ -232,6 +261,70 @@
     <!-- jQuery & Owl Carousel JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script>
+        // Function untuk menampilkan modal login dengan iframe
+        function showLoginModal() {
+            const modal = document.getElementById('loginModal');
+            const modalDialog = document.getElementById('loginModalDialog');
+            const iframe = document.getElementById('loginIframe');
+
+            // Set iframe source
+            iframe.src = 'https://intramas.co.id/ati_ca/';
+
+            // Show modal
+            modal.classList.remove('hidden');
+
+            // Animate modal appearance
+            setTimeout(() => {
+                modalDialog.classList.remove('scale-95', 'opacity-0');
+                modalDialog.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // Function untuk menutup modal login
+        function closeLoginModal() {
+            const modal = document.getElementById('loginModal');
+            const modalDialog = document.getElementById('loginModalDialog');
+            const iframe = document.getElementById('loginIframe');
+
+            // Animate modal disappearance
+            modalDialog.classList.remove('scale-100', 'opacity-100');
+            modalDialog.classList.add('scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                // Clear iframe source untuk menghemat resource
+                iframe.src = '';
+            }, 300);
+        }
+
+        // Event listeners untuk modal login
+        document.addEventListener('DOMContentLoaded', function () {
+            const closeBtn = document.getElementById('closeLoginModal');
+            const modal = document.getElementById('loginModal');
+
+            // Close modal when clicking close button
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeLoginModal);
+            }
+
+            // Close modal when clicking outside
+            if (modal) {
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) {
+                        closeLoginModal();
+                    }
+                });
+            }
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeLoginModal();
+                }
+            });
+        });
+    </script>
     <script src="./hook/index_a.js"></script>
 </body>
 
