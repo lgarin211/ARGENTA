@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "dcrosCache": {
+      ".read": true,
+      ".write": true,
+      "$cacheKey": {
+        ".validate": "newData.hasChildren(['data', 'timestamp', 'expiry']) && newData.child('timestamp').isNumber() && newData.child('expiry').isNumber()"
+      }
+    }
+  }
+}

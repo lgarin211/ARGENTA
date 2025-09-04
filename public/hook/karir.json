@@ -1,0 +1,97 @@
+[
+  {
+    "id": 1,
+    "title": "Project Manager Support",
+    "lokasi": "Jakarta",
+    "kategori": "Business Relation, Promotion & Communication",
+    "deskripsi": "Bertanggung jawab mendukung tim project management dalam perencanaan, pelaksanaan, dan monitoring proyek-proyek perusahaan.",
+    "detail_url": "karir-detail.html?id=1",
+    "periode": "1 Januari 2025 - 31 Desember 2025",
+    "tentang": "Mendukung koordinasi dan pelaksanaan proyek-proyek strategis perusahaan, memastikan timeline dan kualitas tercapai.",
+    "persyaratan": [
+      "Min. Sarjana S1 dengan IPK Min. 3,00",
+      "Memiliki latar belakang pendidikan dari jurusan Teknik Informatika / Sistem Informasi",
+      "Memiliki pengetahuan dasar dan ketertarikan di bidang IT",
+      "Memiliki pengalaman bekerja di bidang teknologi (IT) menjadi nilai tambah",
+      "Usia maks. 25 tahun (Strata 1) dan 26 tahun (Strata 2)",
+      "Penempatan di Kantor Pusat (Jakarta)"
+    ],
+    "batas_usia": "18 - 25 Tahun",
+    "penempatan": "Jakarta"
+  },
+  {
+    "id": 2,
+    "title": "Teknisi Service Center",
+    "lokasi": "Jakarta",
+    "kategori": "Teknisi Mesin",
+    "deskripsi": "Melakukan perawatan, perbaikan, dan troubleshooting mesin-mesin di service center Argenta.",
+    "detail_url": "karir-detail.html?id=2",
+    "periode": "1 Februari 2025 - 31 Desember 2025",
+    "tentang": "Bertanggung jawab atas perawatan dan perbaikan mesin, serta memastikan operasional service center berjalan lancar.",
+    "persyaratan": [
+      "Min. SMK/D3 Teknik Mesin/Elektro",
+      "Pengalaman minimal 1 tahun di bidang terkait",
+      "Mampu membaca gambar teknik",
+      "Bersedia bekerja shift",
+      "Penempatan di Jakarta"
+    ],
+    "batas_usia": "18 - 30 Tahun",
+    "penempatan": "Jakarta"
+  },
+  {
+    "id": 3,
+    "title": "Auditor",
+    "lokasi": "Jakarta",
+    "kategori": "Legal, Money Management",
+    "deskripsi": "Melakukan audit internal, review kepatuhan, dan pelaporan keuangan perusahaan.",
+    "detail_url": "karir-detail.html?id=3",
+    "periode": "1 Maret 2025 - 31 Desember 2025",
+    "tentang": "Melakukan audit keuangan dan memastikan kepatuhan terhadap regulasi yang berlaku di perusahaan.",
+    "persyaratan": [
+      "Min. S1 Akuntansi/Ekonomi",
+      "Pengalaman audit minimal 2 tahun",
+      "Memahami standar audit dan pelaporan keuangan",
+      "Teliti, jujur, dan bertanggung jawab",
+      "Penempatan di Jakarta"
+    ],
+    "batas_usia": "22 - 30 Tahun",
+    "penempatan": "Jakarta"
+  },
+  {
+    "id": 4,
+    "title": "Staff Administrasi Umum",
+    "lokasi": "Surabaya",
+    "kategori": "Administrasi",
+    "deskripsi": "Mengelola dokumen, surat-menyurat, dan administrasi umum kantor cabang.",
+    "detail_url": "karir-detail.html?id=4",
+    "periode": "1 Januari 2025 - 31 Desember 2025",
+    "tentang": "Bertanggung jawab atas administrasi umum, pengarsipan dokumen, dan mendukung operasional kantor cabang.",
+    "persyaratan": [
+      "Min. D3 Administrasi/Manajemen",
+      "Mampu mengoperasikan komputer dan aplikasi perkantoran",
+      "Komunikatif dan teliti",
+      "Penempatan di Surabaya"
+    ],
+    "batas_usia": "18 - 28 Tahun",
+    "penempatan": "Surabaya"
+  },
+  {
+    "id": 5,
+    "title": "Sales Executive",
+    "lokasi": "Bandung",
+    "kategori": "Sales & Marketing",
+    "deskripsi": "Mencari dan membina relasi dengan klien baru serta menjaga hubungan dengan pelanggan lama.",
+    "detail_url": "karir-detail.html?id=5",
+    "periode": "1 Januari 2025 - 31 Desember 2025",
+    "tentang": "Bertanggung jawab atas pencapaian target penjualan dan pengembangan jaringan pelanggan.",
+    "persyaratan": [
+      "Min. D3/S1 semua jurusan",
+      "Pengalaman sales minimal 1 tahun",
+      "Komunikatif dan berorientasi target",
+      "Memiliki kendaraan pribadi menjadi nilai tambah",
+      "Penempatan di Bandung"
+    ],
+    "batas_usia": "20 - 30 Tahun",
+    "penempatan": "Bandung"
+  }
+]

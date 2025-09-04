@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Argenta - Tools Penandaan Koordinat</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 80px);
+        }
+
+        .sidebar {
+            width: 350px;
+            background: white;
+            padding: 1rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(23, 162, 184, 0.4);
+        }
+
+        .status {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .point-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        .point-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            background: #f8f9fa;
+            border-left: 4px solid;
+        }
+
+        .point-item.staf-teknis {
+            border-left-color: #2196F3;
+        }
+
+        .point-item.service-center {
+            border-left-color: #f44336;
+        }
+
+        .point-item.cabang-penjualan {
+            border-left-color: #ffeb3b;
+        }
+
+        .point-item h4 {
+            margin: 0 0 0.25rem 0;
+            color: #333;
+        }
+
+        .point-item p {
+            margin: 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .instructions {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #2196F3;
+        }
+
+        .instructions h3 {
+            margin: 0 0 0.5rem 0;
+            color: #1976d2;
+        }
+
+        .instructions p {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .coordinates {
+            font-family: 'Courier New', monospace;
+            background: #f1f3f4;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗺️ Argenta - Tools Penandaan Koordinat</h1>
+        <p>Sistem Manajemen Lokasi Cabang dan Pegawai</p>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="instructions">
+                <h3>📋 Cara Penggunaan</h3>
+                <p>1. Klik pada peta untuk menandai lokasi<br>
+                2. Isi form dengan data lengkap<br>
+                3. Klik "Tambah Titik" untuk menyimpan lokal<br>
+                4. Klik "Save Data to API" untuk simpan ke server<br>
+                5. Data akan tersimpan dalam format GeoJSON</p>
+            </div>
+
+            <div id="status"></div>
+
+            <form id="pointForm">
+                <div class="form-group">
+                    <label for="namaCabang">📍 Nama Cabang</label>
+                    <input type="text" id="namaCabang" required placeholder="Contoh: Argenta Cabang Purwokerto">
+                </div>
+
+                <div class="form-group">
+                    <label for="namaPegawai">👤 Nama Pegawai</label>
+                    <input type="text" id="namaPegawai" required placeholder="Contoh: John Doe">
+                </div>
+
+                <div class="form-group">
+                    <label for="nomorTelepon">📞 Nomor Telepon</label>
+                    <input type="tel" id="nomorTelepon" required placeholder="Contoh: 08123456789">
+                </div>
+
+                <div class="form-group">
+                    <label for="jenisTitik">🏢 Jenis Lokasi</label>
+                    <select id="jenisTitik" required>
+                        <option value="">Pilih Jenis Lokasi</option>
+                        <option value="staf-teknis">🔵 Staf Teknis</option>
+                        <option value="service-center">🔴 Service Center</option>
+                        <option value="cabang-penjualan">🟡 Cabang Penjualan</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📍 Koordinat Terpilih</label>
+                    <div class="coordinates" id="selectedCoords">Klik pada peta untuk memilih lokasi</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">➕ Tambah Titik</button>
+                <button type="button" class="btn btn-success" onclick="saveDataToAPI()">💾 Save Data to API</button>
+                <button type="button" class="btn btn-warning" onclick="clearAllPointsManual()">🗑️ Hapus Semua</button>
+                <button type="button" class="btn btn-info" onclick="loadDataFromAPI()">🔄 Load from API</button>
+            </form>
+
+            <div class="form-group">
+                <label>📊 Daftar Titik Tersimpan (<span id="pointCount">0</span>)</label>
+                <div class="point-list" id="pointList"></div>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script>
+        // API Configuration
+        const API_CONFIG = {
+            baseURL: 'https://allhub.progesio.my.id/api/hub', // URL API Laravel
+            endpoints: {
+                saveBranch: '/branch/pushmap',
+                saveCoordinates: '/coordinates',
+                getBranches: '/argenta/mapubg'
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+
+        // Inisialisasi peta
+        const map = L.map('map').setView([-7.2906, 109.20], 11);
+
+        // Tambahkan layer dari OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Storage untuk menyimpan semua titik
+        let allPoints = {
+            "type": "FeatureCollection",
+            "features": []
+        };
+
+        // Variabel untuk koordinat yang dipilih
+        let selectedCoordinates = null;
+        let tempMarker = null;
+
+        // Load data dari localStorage jika ada
+        function loadFromDatabase() {
+            const savedData = localStorage.getItem('argentaGeoJSON');
+            if (savedData) {
+                try {
+                    allPoints = JSON.parse(savedData);
+                    renderAllPoints();
+                    updatePointList();
+                } catch (e) {
+                    console.error('Error loading data:', e);
+                }
+            }
+        }
+
+        // Simpan ke localStorage (simulasi database)
+        function saveToDatabase() {
+            localStorage.setItem('argentaGeoJSON', JSON.stringify(allPoints));
+        }
+
+        // Konfigurasi warna berdasarkan jenis
+        function getMarkerColor(jenis) {
+            switch (jenis) {
+                case 'staf-teknis': return '#2196F3';
+                case 'service-center': return '#f44336';
+                case 'cabang-penjualan': return '#ffeb3b';
+                default: return '#666666';
+            }
+        }
+
+        // Buat custom marker dengan warna
+        function createCustomMarker(latlng, jenis) {
+            const color = getMarkerColor(jenis);
+            const icon = L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="
+                    background-color: ${color};
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    border: 3px solid white;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                "></div>`,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            });
+            return L.marker(latlng, { icon: icon });
+        }
+
+        // Event listener untuk klik pada peta
+        map.on('click', function(e) {
+            selectedCoordinates = [e.latlng.lng, e.latlng.lat];
+            
+            // Hapus marker temporary sebelumnya
+            if (tempMarker) {
+                map.removeLayer(tempMarker);
+            }
+            
+            // Tambahkan marker temporary
+            tempMarker = L.marker(e.latlng, {
+                icon: L.divIcon({
+                    className: 'temp-marker',
+                    html: `<div style="
+                        background-color: #ff9800;
+                        width: 15px;
+                        height: 15px;
+                        border-radius: 50%;
+                        border: 2px solid white;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                        animation: pulse 1.5s ease-in-out infinite;
+                    "></div>
+                    <style>
+                        @keyframes pulse {
+                            0% { transform: scale(1); opacity: 1; }
+                            50% { transform: scale(1.3); opacity: 0.7; }
+                            100% { transform: scale(1); opacity: 1; }
+                        }
+                    </style>`,
+                    iconSize: [15, 15],
+                    iconAnchor: [7.5, 7.5]
+                })
+            }).addTo(map);
+            
+            // Update tampilan koordinat
+            document.getElementById('selectedCoords').textContent = 
+                `Lat: ${e.latlng.lat.toFixed(6)}, Lng: ${e.latlng.lng.toFixed(6)}`;
+        });
+
+        // Handle form submission
+        document.getElementById('pointForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!selectedCoordinates) {
+                showStatus('error', '⚠️ Silakan pilih lokasi pada peta terlebih dahulu!');
+                return;
+            }
+            
+            const namaCabang = document.getElementById('namaCabang').value;
+            const namaPegawai = document.getElementById('namaPegawai').value;
+            const nomorTelepon = document.getElementById('nomorTelepon').value;
+            const jenisTitik = document.getElementById('jenisTitik').value;
+            
+            // Buat feature GeoJSON baru
+            const newFeature = {
+                "type": "Feature",
+                "properties": {
+                    "namaCabang": namaCabang,
+                    "namaPegawai": namaPegawai,
+                    "nomorTelepon": nomorTelepon,
+                    "jenisTitik": jenisTitik,
+                    "warna": getMarkerColor(jenisTitik),
+                    "timestamp": new Date().toISOString()
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": selectedCoordinates
+                },
+                "id": Date.now()
+            };
+            
+            // Tambahkan ke koleksi
+            allPoints.features.push(newFeature);
+            
+            // Simpan ke database
+            saveToDatabase();
+            
+            // Render ulang semua titik
+            renderAllPoints();
+            updatePointList();
+            
+            // Reset form
+            document.getElementById('pointForm').reset();
+            selectedCoordinates = null;
+            document.getElementById('selectedCoords').textContent = 'Klik pada peta untuk memilih lokasi';
+            
+            // Hapus marker temporary
+            if (tempMarker) {
+                map.removeLayer(tempMarker);
+                tempMarker = null;
+            }
+            
+            showStatus('success', '✅ Titik berhasil ditambahkan!');
+        });
+
+        // Render semua titik ke peta
+        function renderAllPoints() {
+            // Hapus layer GeoJSON sebelumnya
+            map.eachLayer(function(layer) {
+                if (layer.feature) {
+                    map.removeLayer(layer);
+                }
+            });
+            
+            // Tambahkan semua titik
+            L.geoJSON(allPoints, {
+                pointToLayer: function(feature, latlng) {
+                    return createCustomMarker(latlng, feature.properties.jenisTitik);
+                },
+                onEachFeature: function(feature, layer) {
+                    const props = feature.properties;
+                    const popupContent = `
+                        <div style="font-family: Arial, sans-serif; min-width: 200px;">
+                            <h3 style="margin: 0 0 10px 0; color: ${props.warna};">${props.namaCabang}</h3>
+                            <p style="margin: 5px 0;"><strong>👤 Pegawai:</strong> ${props.namaPegawai}</p>
+                            <p style="margin: 5px 0;"><strong>📞 Telepon:</strong> ${props.nomorTelepon}</p>
+                            <p style="margin: 5px 0;"><strong>🏢 Jenis:</strong> ${getJenisLabel(props.jenisTitik)}</p>
+                            <p style="margin: 5px 0; font-size: 12px; color: #666;">
+                                <strong>📅 Ditambahkan:</strong> ${new Date(props.timestamp).toLocaleString('id-ID')}
+                            </p>
+                            <button onclick="deletePoint(${feature.id})" style="
+                                background: #f44336; color: white; border: none; padding: 5px 10px; 
+                                border-radius: 4px; cursor: pointer; margin-top: 10px;">
+                                🗑️ Hapus
+                            </button>
+                        </div>
+                    `;
+                    layer.bindPopup(popupContent);
+                }
+            }).addTo(map);
+        }
+
+        // Update daftar titik di sidebar
+        function updatePointList() {
+            const pointList = document.getElementById('pointList');
+            const pointCount = document.getElementById('pointCount');
+            
+            pointCount.textContent = allPoints.features.length;
+            
+            if (allPoints.features.length === 0) {
+                pointList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Belum ada titik tersimpan</p>';
+                return;
+            }
+            
+            pointList.innerHTML = allPoints.features.map(feature => {
+                const props = feature.properties;
+                return `
+                    <div class="point-item ${props.jenisTitik}" onclick="focusOnPoint(${feature.id})">
+                        <h4>${props.namaCabang}</h4>
+                        <p><strong>👤</strong> ${props.namaPegawai}</p>
+                        <p><strong>📞</strong> ${props.nomorTelepon}</p>
+                        <p><strong>🏢</strong> ${getJenisLabel(props.jenisTitik)}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Helper function untuk label jenis
+        function getJenisLabel(jenis) {
+            switch (jenis) {
+                case 'staf-teknis': return '🔵 Staf Teknis';
+                case 'service-center': return '🔴 Service Center';
+                case 'cabang-penjualan': return '🟡 Cabang Penjualan';
+                default: return jenis;
+            }
+        }
+
+        // Fokus ke titik tertentu
+        function focusOnPoint(id) {
+            const feature = allPoints.features.find(f => f.id === id);
+            if (feature) {
+                const coords = feature.geometry.coordinates;
+                map.setView([coords[1], coords[0]], 16);
+                
+                // Buka popup
+                map.eachLayer(function(layer) {
+                    if (layer.feature && layer.feature.id === id) {
+                        layer.openPopup();
+                    }
+                });
+            }
+        }
+
+        // Hapus titik tertentu
+        function deletePoint(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus titik ini?')) {
+                allPoints.features = allPoints.features.filter(f => f.id !== id);
+                saveToDatabase();
+                renderAllPoints();
+                updatePointList();
+                showStatus('success', '✅ Titik berhasil dihapus!');
+            }
+        }
+
+        // Save Data to API
+        async function saveDataToAPI() {
+            if (allPoints.features.length === 0) {
+                showStatus('error', '⚠️ Tidak ada data untuk disimpan ke API!');
+                return;
+            }
+
+            showStatus('info', '🔄 Menyimpan data ke server...');
+
+            try {
+                let successCount = 0;
+                let errorCount = 0;
+                
+                // Kirim setiap titik satu per satu ke endpoint pushmap
+                for (const feature of allPoints.features) {
+                    try {
+                        const locationData = {
+                            id: feature.id,
+                            pointType: feature.properties.jenisTitik,        // jenisTitik -> pointType
+                            latitude: feature.geometry.coordinates[1],
+                            longitude: feature.geometry.coordinates[0],
+                            branchName: feature.properties.namaCabang,       // namaCabang -> branchName
+                            staffName: feature.properties.namaPegawai,       // namaPegawai -> staffName
+                            phoneNumber: feature.properties.nomorTelepon,    // nomorTelepon -> phoneNumber
+                            timestamp: feature.properties.timestamp,
+                            color: feature.properties.warna                  // warna -> color
+                        };
+
+                        console.log('Mengirim data:', locationData);
+
+                        const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.saveBranch}`, {
+                            method: 'POST',
+                            headers: API_CONFIG.headers,
+                            body: JSON.stringify(locationData)
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+                            console.error(`Error untuk ${locationData.branchName}:`, response.status, errorData);
+                            
+                            // Tampilkan detail error validasi jika ada
+                            if (errorData.errors) {
+                                console.error('Validation errors:', errorData.errors);
+                                const errorMessages = Object.values(errorData.errors).flat().join(', ');
+                                console.error('Error details:', errorMessages);
+                            }
+                            
+                            errorCount++;
+                        } else {
+                            const result = await response.json();
+                            console.log(`Berhasil menyimpan ${locationData.branchName}:`, result);
+                            successCount++;
+                        }
+
+                    } catch (error) {
+                        console.error(`Error mengirim data ${feature.properties.namaCabang}:`, error);
+                        errorCount++;
+                    }
+                }
+
+                // Tampilkan hasil
+                if (successCount > 0 && errorCount === 0) {
+                    showStatus('success', `✅ Semua data berhasil disimpan! (${successCount} titik)`);
+                    // Reset pemetaan setelah berhasil save
+                    clearAllPoints();
+                } else if (successCount > 0 && errorCount > 0) {
+                    showStatus('info', `⚠️ ${successCount} titik berhasil, ${errorCount} gagal disimpan`);
+                } else {
+                    showStatus('error', `❌ Gagal menyimpan semua data (${errorCount} titik)`);
+                }
+
+            } catch (error) {
+                console.error('Error saving data to API:', error);
+                
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    showStatus('error', '❌ Gagal terhubung ke server. Pastikan server Laravel berjalan di https://allhub.progesio.my.id/');
+                } else if (error.message.includes('401')) {
+                    showStatus('error', '❌ Unauthorized. Periksa API authentication.');
+                } else if (error.message.includes('403')) {
+                    showStatus('error', '❌ Forbidden. Periksa permission API.');
+                } else if (error.message.includes('422')) {
+                    showStatus('error', '❌ Data tidak valid. Periksa format data yang dikirim.');
+                } else if (error.message.includes('500')) {
+                    showStatus('error', '❌ Server error. Periksa log server Laravel.');
+                } else {
+                    showStatus('error', `❌ Error: ${error.message}`);
+                }
+            }
+        }
+
+        // Load Data from API
+        async function loadDataFromAPI() {
+            try {
+                showStatus('info', '🔄 Memuat data dari server...');
+
+                const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.getBranches}`, {
+                    method: 'GET',
+                    headers: API_CONFIG.headers
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Data dari API:', result);
+                
+                // Cek apakah response dalam format GeoJSON
+                if (result.type === 'FeatureCollection' && result.features) {
+                    allPoints = result;
+                    renderAllPoints();
+                    updatePointList();
+                    showStatus('success', `✅ Data berhasil dimuat dari server! (${allPoints.features.length} titik)`);
+                } else if (result.data) {
+                    // Jika data dalam format lain, convert ke GeoJSON
+                    allPoints = {
+                        "type": "FeatureCollection",
+                        "features": result.data.map(item => ({
+                            "type": "Feature",
+                            "properties": {
+                                "namaCabang": item.namaCabang,
+                                "namaPegawai": item.namaPegawai,
+                                "nomorTelepon": item.nomorTelepon,
+                                "jenisTitik": item.jenisTitik,
+                                "warna": item.warna,
+                                "timestamp": item.timestamp
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [item.longitude, item.latitude]
+                            },
+                            "id": item.id
+                        }))
+                    };
+                    renderAllPoints();
+                    updatePointList();
+                    showStatus('success', `✅ Data berhasil dimuat dari server! (${result.data.length} titik)`);
+                } else {
+                    throw new Error('Format response tidak dikenali');
+                }
+
+            } catch (error) {
+                console.error('Error loading data from API:', error);
+                
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    showStatus('error', '❌ Gagal terhubung ke server. Pastikan server Laravel berjalan di https://allhub.progesio.my.id/');
+                } else if (error.message.includes('404')) {
+                    showStatus('error', '❌ Endpoint tidak ditemukan. Periksa URL API.');
+                } else if (error.message.includes('500')) {
+                    showStatus('error', '❌ Server error. Periksa log server Laravel.');
+                } else {
+                    showStatus('error', `❌ Gagal memuat data: ${error.message}`);
+                }
+                
+                // Fallback to local data
+                loadFromDatabase();
+            }
+        }
+
+        // Export GeoJSON
+        function exportGeoJSON() {
+            if (allPoints.features.length === 0) {
+                showStatus('error', '⚠️ Tidak ada data untuk diekspor!');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(allPoints, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `argenta-koordinat-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            showStatus('success', '✅ File GeoJSON berhasil diekspor!');
+        }
+
+        // Hapus semua titik
+        function clearAllPoints() {
+            allPoints.features = [];
+            saveToDatabase();
+            renderAllPoints();
+            updatePointList();
+        }
+
+        // Hapus semua titik (manual dengan konfirmasi)
+        function clearAllPointsManual() {
+            if (allPoints.features.length === 0) {
+                showStatus('error', '⚠️ Tidak ada data untuk dihapus!');
+                return;
+            }
+            
+            if (confirm('Apakah Anda yakin ingin menghapus SEMUA titik? Tindakan ini tidak dapat dibatalkan!')) {
+                allPoints.features = [];
+                saveToDatabase();
+                renderAllPoints();
+                updatePointList();
+                showStatus('success', '✅ Semua titik berhasil dihapus!');
+            }
+        }
+
+        // Tampilkan status message
+        function showStatus(type, message) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Load data saat halaman dimuat
+        loadFromDatabase();
+        
+        // Optional: Load data from API on page load
+        // loadDataFromAPI();
+    </script>
+</body>
+</html>
